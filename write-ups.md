@@ -1,5 +1,5 @@
 ## Write-Ups
-TryHackMe
+[TryHackMe](./tryhackme.md)
 
 HackTheBox
 
