@@ -1,9 +1,9 @@
-#TryHackMe Write-Ups
+# TryHackMe Write-Ups
 You have came to the right place to learn about CTFs/Challenges!
 
-##Blue Teaming
+## Blue Teaming
 
-##Red Teaming
+## Red Teaming
 
 1. Steel Mountain
 1. Alfred
