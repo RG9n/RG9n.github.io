@@ -1,6 +1,6 @@
 ## Welcome to The Den
 
-FEAST ON SOME WRITE-UPS, DOCUMENTATIONS, AND RESOURCES.
+FEAST ON SOME [WRITE-UPS](./write-ups.md), DOCUMENTATIONS, AND RESOURCES.
 
 ## Introduction
 The Den will contain Purple Team resources. I am using it to document my learning and further my understanding of both Red and Blue team Cyber Security.
