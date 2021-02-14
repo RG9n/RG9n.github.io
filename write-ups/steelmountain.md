@@ -127,7 +127,9 @@ Looks like user.txt is located on the desktop. Go ahead and concatenate(cat) it 
 
 ## Task 3 : Privilege Escalation
 
-Now we are going to need the powershell script [PowerUp](https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1). The script's purpose is for evaluatuating a Windows machine and determining abnormalities - "PowerUp aims to be a clearinghouse of common Windows privilege escalation vectors that rely on misconfigurations." Luckily for us, we can use this to find a potential usage of a misconfiguration to escalate our priviledges.
+Now we are going to need the powershell script [PowerUp](https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1). The script's purpose is for evaluatuating a Windows machine and determining abnormalities - "PowerUp aims to be a clearinghouse of common Windows privilege escalation vectors that rely on misconfigurations." 
+
+Luckily for us, we can use this to find a potential usage of a misconfiguration to escalate our priviledges.
 
 Let's background our meterpreter session (background) and open up another terminal session as root in our steel mountain directory. 
 
