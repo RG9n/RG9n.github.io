@@ -5,7 +5,7 @@ You have came to the right place to learn about CTFs/Challenges!
 
 ## Red Teaming
 
-1. Steel Mountain
+1. [Steel Mountain](./write-ups/steelmountain.md)
 1. Alfred
 1. HackPark
 1. Game Zone
