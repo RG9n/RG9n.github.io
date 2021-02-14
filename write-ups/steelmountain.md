@@ -60,6 +60,7 @@ Now we need to check [Exploit-DB](https://www.exploit-db.com/) with the informat
 We're in luck, it looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using **CVE-2014-6287**. If it doesn't work... there appears to be a newer exploit using python, but the first one involved metasploit, so we are going to be using that one.
 
 **4) Use Metasploit to get an initial shell. What is the user flag?**
+
 Looks like it's time to hop over to Metasploit and get a shell on this server!
 
 Lets go back to that root terminal we opened earlier in the Steel Mountain directory, and run metasploit to search for the related exploit. This will allow us to get a shell and find that user flag.
@@ -287,6 +288,7 @@ This exploit script will have to be ran twice. The first run is used to pull the
 Once you get a win on the shell, we can move on to looking for a misconfigured service.
 
 **1) What powershell -c command could we run to manually find out the service name?**
+
 This is a good cmdlet to know, but not really useful due to winPEAS. winPEAS will tell you the service to target, but this is an option for manually finding the service.
 
 It is time to use winPEAS for some awesome script priviledge escalation. Run a powershell script to get winPEAS from the HTTPServer you are hosting using your tun0 IP.
