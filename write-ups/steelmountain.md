@@ -13,4 +13,5 @@ nmap 10.10.98.28 -p- -A -vv
 The scan I chose to run looks at all ports and runs an aggressive scan with very verbose information. It can sometimes be useful to output this in a grepable format by adding -oG <filename>.
 
 Here is what I managed to find with my scan that I believe will be useful:
+
 2. 
