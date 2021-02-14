@@ -312,7 +312,7 @@ From here, rinse and repeat the steps that were used to stop the service, swap t
 
 This will fix both initial access exploits used in the room.
 
-### Privilege escalation
+### Privilege Escalation
 
 * Fix the misconfiguration for auto restart by setting it to false. 
 * Fix the [unquoted service paths](https://medium.com/@SumitVerma101/windows-privilege-escalation-part-1-unquoted-service-path-c7a011a8d8ae) by enclosing the file path with quotes. This is required because the service file path has spaces in it. 
