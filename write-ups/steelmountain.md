@@ -177,7 +177,7 @@ To create this infected binary reverse shell we are going to use msfvenom to gen
 * We set the payload to a windows reverse tcp shell.
 * We set the LHOST to our OpenVPN Tun0 IP.
 * We need a new port since we are using 4444, so I will just use 4445.
-* We need to encode it with [x86/shikata_ga_nai](https://www.fireeye.com/blog/threat-research/2019/10/shikata-ga-nai-encoder-still-going-strong.html).
+* We should encode it with [x86/shikata_ga_nai](https://www.fireeye.com/blog/threat-research/2019/10/shikata-ga-nai-encoder-still-going-strong.html).
 * We need to format as an executable because that is what the service is running as.
 * We need to specify the output name to the service we will be replacing.
 
