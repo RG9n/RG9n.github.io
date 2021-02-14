@@ -6,7 +6,7 @@ The first step I always find useful is creating a directory for the room, and op
 
 ## Task 1 : Introduction
 
-1. **Who is the employee of the month?**
+**1) Who is the employee of the month?**
 
 I am going to start recon for this CTF by running a nmap scan on my assigned MACHINE_IP (10.10.98.28) for the room. I will be looking for open ports that may have vulnerabilities, so that I can take advantage of them using Metasploit.
 
@@ -18,8 +18,8 @@ The scan I chose to run looks at all ports and runs an aggressive scan with very
 
 Here is what I managed to find with my scan that I believe will be useful:
 
-2. Operating System: Windows Server 2008 R2 - 2012
-2. Interesting open ports:
+1. Operating System: Windows Server 2008 R2 - 2012
+1. Interesting open ports:
 * 8080 (HttpFileServer httpd 2.3)
 * 3389 (RDP)
 * 80 (HTTP)
@@ -39,11 +39,11 @@ Bingo! We got the answer for #1. It is common for information to be given away i
 
 ## Task 2 : Initial Access
 
-3. **Scan the machine with nmap. What is the other port running a web server on?**
+**1) Scan the machine with nmap. What is the other port running a web server on?**
 
 We already found this file server in Task 1 with our nmap scan.
 
-3. **Take a look at the other web server. What file server is running?**
+**2) Take a look at the other web server. What file server is running?**
 
 Our nmap revealed that this was HttpFileServer httpd 2.3, but We still need to find the vendor. Let's navigate to the MACHINE_IP:8080 and see if we can find it in the source. 
 
@@ -53,13 +53,13 @@ Our nmap revealed that this was HttpFileServer httpd 2.3, but We still need to f
 
 It looks this is a Rejetto HTTP File Server (HFS) using httpd 2.3, hopefully it is vulnerable because this could be a point of access.
 
-3. **What is the CVE number to exploit this file server?**
+**3) What is the CVE number to exploit this file server?**
 
 Now we need to check [Exploit-DB](https://www.exploit-db.com/) with the information we have about the Server.
 
 We're in luck, it looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using **CVE-2014-6287**. If it doesn't work... there appears to be a newer exploit using python, but the first one involved metasploit, so we are going to be using that one.
 
-3. **Use Metasploit to get an initial shell. What is the user flag?**
+**4) Use Metasploit to get an initial shell. What is the user flag?**
 Looks like it's time to hop over to Metasploit and get a shell on this server!
 
 Lets go back to that root terminal we opened earlier in the Steel Mountain directory, and run metasploit to search for the related exploit. This will allow us to get a shell and find that user flag.
@@ -157,7 +157,7 @@ meterpreter > powershell_shell
 PS > 
 ```
 
-4. **Take close attention to the CanRestart option that is set to true. What is the name of the name of the service which shows up as an unquoted service path vulnerability?**
+**1) Take close attention to the CanRestart option that is set to true. What is the name of the name of the service which shows up as an unquoted service path vulnerability?**
 
 Now that we have successfully launched powershell, lets run our PowerUp and Invoke-AllChecks to look for the **CanRestart** option being **true** along with the service having **unquoted service paths**.
 
@@ -168,7 +168,7 @@ PS > Invoke-AllChecks
 
 Looking through we can see that **AdvancedSystemCareService9** applies to both criteria we were looking for. The unquoted service could be exploited, but we're just going to abuse the weak file permissions to restart the service on the system. Go ahead and close the Powershell session with CTRL+C to get back to meterpreter.
 
-4. **What is the root flag?**
+**2) What is the root flag?**
 
 Since the directory (C:\Program Files (x86)\IObit\Advanced SystemCare\) to the application is write-able, we can copy our infected binary there with meterpreter. Now, we just need to swap the actual application with our malicious version. We can then restart the service, and run it to get root for access to the flag.
 
@@ -255,7 +255,7 @@ type filepath\root.txt
 
 One of the best ways to get better at CTFs like this is to find alternative solutions. There's almost always plenty of other options/paths you can take and you can learn a lot from finding new routes.
 
-For this one let's backtrack to the other exploit we saw in [Task 2](https://github.com/RG9n/RG9n.github.io/blob/main/write-ups/steelmountain.md#task-2--initial-access), we will be using the same vulnerability, but a new [exploit](https://www.exploit-db.com/exploits/39161) using python. We saw this earlier in Exploit-DB.
+For this one let's backtrack to the other exploit we saw in Task 2. We will be using the same CVE, but a new [exploit](https://www.exploit-db.com/exploits/39161) with python. We saw this method earlier in Exploit-DB.
 
 What will be needed for this exploit and priviledge escalation:
 * Open 3 terminal windows, and run them in the order listed.
@@ -286,7 +286,7 @@ This exploit script will have to be ran twice. The first run is used to pull the
 
 Once you get a win on the shell, we can move on to looking for a misconfigured service.
 
-5. What powershell -c command could we run to manually find out the service name?
+**1) What powershell -c command could we run to manually find out the service name?**
 This is a good cmdlet to know, but not really useful due to winPEAS. winPEAS will tell you the service to target, but this is an option for manually finding the service.
 
 It is time to use winPEAS for some awesome script priviledge escalation. Run a powershell script to get winPEAS from the HTTPServer you are hosting using your tun0 IP.
@@ -303,8 +303,3 @@ From here, rinse and repeat the steps that were used to stop the service, swap t
 ### Congratulations! You're done with the room!
 
 Feel free to reach out to me on [twitter](https://twitter.com/R_G_9_n) if you have any questions.
-
-
-
-
-
