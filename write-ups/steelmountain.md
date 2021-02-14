@@ -304,4 +304,4 @@ From here, rinse and repeat the steps that were used to stop the service, swap t
 
 ### Congratulations! You're done with the room!
 
-Feel free to reach out to me on [twitter](https://twitter.com/R_G_9_n) if you have any questions.
+Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
