@@ -1,15 +1,26 @@
 # TryHackMe Write-Ups
-You have came to the right place to learn about CTFs/Challenges!
+You have came to the right place to learn about CTFs/Challenges! I am going through both the Offensive Pentesting (77%) and Cyber Defense (70%) learning path. I have already completed the COMPTIA PENTEST+ path, so I will most likely not be going back to do write-ups on those because I enjoy doing them while I am currently doing the room.
 
-## Blue Teaming
+## Blue Teaming (Cyber Defense path not fully released yet)
+## Malware Analysis & RE
 
-## Red Teaming
+* MAL: Researching
+* Basic Malware RE
+* MAL: REMnux - The Redux
+* Reversing .NET Apps (Not yet released)
 
-1. [Steel Mountain](./write-ups/steelmountain.md)
-1. Alfred
-1. HackPark
-1. Game Zone
-1. Skynet
-1. Daily Bugle
-1. Overpass 2 - Hacked
-1. Relevant
+## Red Teaming (Rooms left)
+### Advanced Exploitation
+
+* [Steel Mountain](./write-ups/steelmountain.md)
+* Alfred
+* HackPark
+* Game Zone
+* Skynet
+* Daily Bugle
+* Overpass 2 - Hacked
+* Relevant
+
+### Buffer Overflow
+
+* Brainpan 1
