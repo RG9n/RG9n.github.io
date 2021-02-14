@@ -123,7 +123,7 @@ Let's now cd to bill and check his desktop/documents for the flag.
 
 Looks like user.txt is located on the desktop. Go ahead and concatenate(cat) it to get the flag.
 
-## Task 3 : Priviledge Escalation
+## Task 3 : Privilege Escalation
 
 Now we are going to need the powershell script [PowerUp](https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1). The script's purpose is for evaluatuating a Windows machine and determining abnormalities - "PowerUp aims to be a clearinghouse of common Windows privilege escalation vectors that rely on misconfigurations." Luckily for us, we can use this to find a potential usage of a misconfiguration to escalate our priviledges.
 
@@ -303,5 +303,27 @@ Run winPEAS and you will see that it is pointing towards those unquoted paths fr
 From here, rinse and repeat the steps that were used to stop the service, swap the binaries, and restart the service while listening on the port assosciated with the infected binary.
 
 ### Congratulations! You're done with the room!
+
+## Mitigations
+
+### Initial Access
+
+* Patch Rejetto to 2.4 RC6
+
+This will fix both initial access exploits used in the room.
+
+### Privilege escalation
+
+* Fix the misconfiguration for auto restart by setting it to false. 
+* Fix the [unquoted service paths](https://medium.com/@SumitVerma101/windows-privilege-escalation-part-1-unquoted-service-path-c7a011a8d8ae) by enclosing the file path with quotes. This is required because the service file path has spaces in it. 
+* Disallow writing by a user to service paths.
+
+### Cleanup
+
+* Kill the running shells PIDs and remove the shells.
+* Remove the imposter service file and replace with the correct service binary.
+* Remove winPEAS, nc, and PowerUp.
+
+If I did not know what payload was used here that replaced the service, I would recommend to reimage the device.
 
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
