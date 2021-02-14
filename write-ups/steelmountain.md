@@ -57,6 +57,8 @@ It looks this is a Rejetto HTTP File Server (HFS) using httpd 2.3, hopefully it 
 
 Now we need to check [Exploit-DB](https://www.exploit-db.com/) with the information we have about the Server.
 
+You could also use searchsploit for rejetto.
+
 We're in luck, it looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using **CVE-2014-6287**. If it doesn't work... there appears to be a newer exploit using python. However, we are going to use the metasploit one because it fits the scope of the room.
 
 **4) Use Metasploit to get an initial shell. What is the user flag?**
