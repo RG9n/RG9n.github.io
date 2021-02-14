@@ -54,7 +54,7 @@ Our nmap revealed that this was HttpFileServer httpd 2.3. We still need to find 
 3. What is the CVE number to exploit this file server?
 
 This could be a point of initial access. Let's check [Exploit-DB](https://www.exploit-db.com/) with the information we now have.
-Looks like we can use Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (2) AKA [CVE-2014-6287](https://www.exploit-db.com/exploits/39161)
+Looks like we can use [Rejetto HTTP File Server (HFS) 2.3.x - Remote Command Execution (1)](https://www.exploit-db.com/exploits/34668) using CVE-2014-6287. If it doesn't work... there appears to be a newer exploit (2), but the first one involved metasploit so we are going to be using that one.
 
 3. Use Metasploit to get an initial shell. What is the user flag?
 Looks like it's time to hop over to Metasploit and get a shell on this server!
@@ -251,3 +251,5 @@ dir "\root.txt*" /s
 ## Task 4: Access and Escalation Without Metasploit
 
 One of the best ways to get better at CTFs like this is to find alternatives. There's almost always plenty of other options/paths you can take and you can learn a lot from finding new routes.
+
+For this one let's backtrack to the other exploit we saw in Task 2, we will be using the same vulnerability, but a new [exploit](https://www.exploit-db.com/exploits/39161). We saw this earlier in exploit-db.
