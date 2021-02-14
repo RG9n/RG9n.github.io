@@ -14,4 +14,11 @@ The scan I chose to run looks at all ports and runs an aggressive scan with very
 
 Here is what I managed to find with my scan that I believe will be useful:
 
-2. 
+2. Operating System: Windows Server 2008 R2 - 2012
+2. Interesting open ports:
+* 8080 (HttpFileServer httpd 2.3)
+* 3389 (RDP)
+* 80 (HTTP)
+* 445 (SMB)
+* 139 (SMB)
+* 135 (MSRPC)
