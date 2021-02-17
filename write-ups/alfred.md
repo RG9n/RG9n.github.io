@@ -171,7 +171,11 @@ impersonate_token "BUILTIN\Administrators"
 getuid
 ```
 
-Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator token. However, we might not have the permissions of system yet ["(this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do)"](https://tryhackme.com/room/alfred). Due to this, we must migrate to a process that has SYSTEM permissions.
+Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator token. However, we might not have the permissions of system yet.
+
+["this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do"](https://tryhackme.com/room/alfred). 
+
+Due to this, we must migrate to a process that has SYSTEM permissions.
 
 We can do this by using ps to find a PID to migrate to that is running as SYSTEM. We are going to use services.exe.
 
