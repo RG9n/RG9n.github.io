@@ -16,9 +16,9 @@ Running this scan, we've come across an issue. The box is blocking the ping prob
 
 Success, we can now see that there are 3 open ports. Luckily, they're all useful.
 
-* 8080
-* 3389
-* 80
+* 8080 Jetty(9.4.z-SNAPSHOT)
+* 3389 RDP
+* 80 Website
 
 While we wait for the SYN Stealth Scan, let's go checkout the website on port 80.
 
