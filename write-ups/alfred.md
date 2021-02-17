@@ -160,7 +160,11 @@ Start-Process "svchosts.exe"
 
 Now, check your listener in metasploit and you should see the command shell session opened. Let's go ahead and view privileges with whoami /priv.
 
-Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Background the session, and use the metasploit incognito module. Unfortunately, it is still not a meterpreter shell though. We must use jenkins to run the binary as SYSTEM to get a meterpreter shell.
+Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Background the session, and use the metasploit incognito module. However, it is still not a meterpreter shell though. 
+
+Let's see if we can upgrade our session using sessions -u 1. 
+
+Let's try using Jenkins to run the binary as SYSTEM to get a meterpreter shell.
 
 ```ps
 powershell Start-Process "svchosts.exe"
