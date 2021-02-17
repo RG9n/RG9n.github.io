@@ -20,7 +20,3 @@ You have came to the right place to learn about CTFs/Challenges! I am going thro
 * Daily Bugle
 * Overpass 2 - Hacked
 * Relevant
-
-### Buffer Overflow
-
-* Brainpan 1
