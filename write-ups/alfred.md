@@ -171,7 +171,7 @@ impersonate_token "BUILTIN\Administrators"
 getuid
 ```
 
-Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator token. However, we might not have the permissions of system yet.
+Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator [token](https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens). However, we might not have the permissions of system yet.
 
 ["this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do"](https://tryhackme.com/room/alfred). 
 
@@ -190,3 +190,56 @@ Now we can cd to the given directory and use more root.txt to see the flag!
 ### Congratulations! You're done with the room!
 
 ## Mitigations
+
+### Initial Access
+
+* Change off the default admin account name to avoid brute-forcing
+* Do not use admin;admin
+
+### Privilege Escalation
+
+* Ensure that SeImpersonatePrivilege and SeDebugPrivilege are disabled. These are commonly abused.
+
+### Other Recommended Changes
+
+*  Upgrade to Jenkins (2.249.1)
+*  Go to the plugin manager and update plugins to patch other vulnerabilities.
+
+```
+Jenkins 2.190.1 core and libraries
+    Multiple security vulnerabilities in Jenkins 2.251 and earlier, LTS 2.235.3 and earlier
+    Multiple security vulnerabilities in Jenkins 2.227 and earlier, LTS 2.204.5 and earlier
+    Multiple vulnerabilities in Jenkins 2.218 and earlier, LTS 2.204.1 and earlier
+    Multiple security vulnerabilities in Jenkins 2.244 and earlier, LTS 2.235.1 and earlier
+
+Matrix Authorization Strategy Plugin 2.5
+    Stored XSS vulnerability
+Credentials Binding Plugin 1.20
+    Improper masking of some secrets
+    Secrets are not masked in builds without build steps
+Timestamper 1.10
+    Stored XSS vulnerability
+Script Security Plugin 1.66
+    Sandbox bypass vulnerability
+    Sandbox bypass vulnerability
+    Stored XSS vulnerability
+    Sandbox bypass vulnerability
+    Sandbox bypass vulnerability
+Mailer Plugin 1.29
+    Missing hostname validation
+Git plugin 3.12.1
+    Stored XSS vulnerability
+Lockable Resources plugin 2.6
+    CSRF vulnerability
+Matrix Project Plugin 1.14
+    Stored XSS vulnerability in single axis builds tooltips
+    Stored XSS vulnerability in multiple axis builds tooltips
+Pipeline: Groovy 2.74
+    Sandbox bypass via default method parameter expression
+Email Extension Plugin 2.68
+    Missing hostname validation
+Subversion Plug-in 2.12.2
+    Stored XSS vulnerability
+```
+
+Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
