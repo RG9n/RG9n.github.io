@@ -160,14 +160,29 @@ Start-Process "svchosts.exe"
 
 Now, check your listener in metasploit and you should see the command shell session opened. Let's go ahead and view privileges with whoami /priv.
 
-Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Background the session, and use the metasploit incognito module. However, it is still not a meterpreter shell though. 
+Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Exit the cmd session, and use the metasploit incognito module with meterpreter. Then, list the tokens.
 
-Let's see if we can upgrade our session using sessions -u 1. 
+**To check which tokens are available, enter the list_tokens -g. We can see that the BUILTIN\Administrators token is available. Use the impersonate_token "BUILTIN\Administrators" command to impersonate the Administrators token. What is the output when you run the getuid command?**
 
-Let's try using Jenkins to run the binary as SYSTEM to get a meterpreter shell.
-
-```ps
-powershell Start-Process "svchosts.exe"
+```
+load incognito
+list_tokens -g
+impersonate_token "BUILTIN\Administrators"
+getuid
 ```
 
-Unfortunately, I was unable to get this reverse shell to call back and it just hangs. This seemed to be a known issue for the room, so I will have to find another way to get a meterpreter shell.
+Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator token. However, we might not have the permissions of system yet ["(this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do)"](https://tryhackme.com/room/alfred). Due to this, we must migrate to a process that has SYSTEM permissions.
+
+We can do this by using ps to find a PID to migrate to that is running as SYSTEM. We are going to use services.exe.
+
+```
+migrate services.exePID
+```
+
+**read the root.txt file at C:\Windows\System32\config**
+
+Now we can cd to the given directory and use more root.txt to see the flag!
+
+### Congratulations! You're done with the room!
+
+## Mitigations
