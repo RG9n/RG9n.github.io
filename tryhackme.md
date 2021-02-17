@@ -13,7 +13,7 @@ You have came to the right place to learn about CTFs/Challenges! I am going thro
 ### Advanced Exploitation
 
 * [Steel Mountain](./write-ups/steelmountain.md)
-* [Alfred]((./write-ups/alfred.md)
+* [Alfred](./write-ups/alfred.md)
 * HackPark
 * Game Zone
 * Skynet
