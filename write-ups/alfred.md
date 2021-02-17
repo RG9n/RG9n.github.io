@@ -193,8 +193,9 @@ Now we can cd to the given directory and use more root.txt to see the flag!
 
 ### Initial Access
 
-* Change off the default admin account name to avoid brute-forcing
-* Do not use admin;admin
+* Change off the default admin account name to avoid brute-forcing.
+* Do not use admin;admin.
+* Add an account lockout for incorrect logins.
 
 ### Privilege Escalation
 
@@ -202,7 +203,7 @@ Now we can cd to the given directory and use more root.txt to see the flag!
 
 ### Other Recommended Changes
 
-*  Upgrade to Jenkins (2.249.1)
+*  Upgrade to Jenkins (2.249.1).
 *  Go to the plugin manager and update plugins to patch other vulnerabilities.
 
 ```
