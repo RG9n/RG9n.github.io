@@ -22,7 +22,7 @@ Success, we can now see that there are 3 open ports. Luckily, they're all useful
 
 While we wait for the SYN Stealth Scan, let's go checkout the website on port 80.
 
-We can gather some information from the site, **alfred@wayneenterprises.com**
+We can gather some information from the site, **alfred@wayneenterprises[.]com**
 
 **What is the username and password for the log in panel(in the format username:password)**
 
