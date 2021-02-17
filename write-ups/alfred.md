@@ -196,6 +196,7 @@ Now we can cd to the given directory and use more root.txt to see the flag!
 * Change off the default admin account name to avoid brute-forcing.
 * Do not use admin;admin.
 * Add an account lockout for incorrect logins.
+* Disable the accounts of people who are no longer working. (RIP Bruce)
 
 ### Privilege Escalation
 
