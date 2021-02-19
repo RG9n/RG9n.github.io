@@ -34,7 +34,7 @@ On MACHINE_IP:8080 we can see that there is a Jenkins login form. Let's try to f
 
 Let's try to login to alfred with some common passwords to test if it will lock out the account for incorrect attempts. It looks like Jenkins doesn't have an attempt limit so let's try a bruteforce with the wellknown password list [rockyou.txt](https://www.kaggle.com/wjburns/common-password-list-rockyoutxt)
 
-We're going to use hydra to do this but first we need to get the action and method.
+We're going to use hydra to do this but first we need to get the action and method, which can be found in the source code.
 * Action: j_acegi_security_check
 * Method: Post
 
