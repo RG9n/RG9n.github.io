@@ -1,4 +1,4 @@
-# TryHackMe - Steel Mountain Write-Up
+# TryHackMe - [Steel Mountain](https://tryhackme.com/room/steelmountain) Write-Up
 
 "In this room you will enumerate a Windows machine, gain initial access with Metasploit, use Powershell to further enumerate the machine and escalate your privileges to Administrator."
 
