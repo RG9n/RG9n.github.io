@@ -349,6 +349,14 @@ This is already done, because we used winPEAS to help with our enumeration. It a
 
 ### Initial Access
 
+* Update BlogEngine to 3.3.8
+* More secure password, add a symbol. 
+* Switch the name of the admin account.
+* Account lockout for invalid attempts.
+
 ### Privilege Escalation
+
+* Message.exe seemed like a spam alert virus in itself, I'd remove it completely.
+* Turn off AutoLogon for the administrator account.
 
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
