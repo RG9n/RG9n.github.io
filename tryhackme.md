@@ -14,7 +14,7 @@ You have came to the right place to learn about CTFs/Challenges! I am going thro
 
 * [Steel Mountain](./write-ups/steelmountain.md)
 * [Alfred](./write-ups/alfred.md)
-* HackPark
+* [HackPark](./write-ups/hackpark.md)
 * Game Zone
 * Skynet
 * Daily Bugle
