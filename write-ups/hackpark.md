@@ -337,6 +337,12 @@ Navigate to C:/ and run dir /s root.txt*
 
 We will actually see that it is still in recents and there is a link file to it because of that. However, it also shows the actual directory.
 
+## Task 5: Privilege Escalation Without Metasploit
+
+**1) Using winPeas, what was the Original Install time? (This is date and time)**
+
+This is already done, because we used winPEAS to help with our enumeration. It appears when you launch winPEAS the line below the Product ID.
+
 ### Congratulations! You're done with the room!
 
 ## Mitigations
