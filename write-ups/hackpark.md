@@ -2,14 +2,14 @@
 
 "This room will cover brute-forcing an accounts credentials, handling public exploits, using the Metasploit framework and privilege escalation on Windows."
 
-Task 1: Deploy the vulnerable Windows machine
+## Task 1: Deploy the vulnerable Windows machine
 
-**1) Whats the name of the clown displayed on the homepage?
+**1) Whats the name of the clown displayed on the homepage?**
 
 Let's start by running an nmap on the device to see what's available to us. I always like to run an aggressive scan (-A) on all ports (-p-) with very verbose information.
 
 ```
-nmap 
+nmap 10.10.220.231 -A -p- -vv
 ```
 
 We need to add -Pn to the end of the nmap to skip host discovery, because it is blocking our ping probes.
@@ -24,10 +24,10 @@ While the nmap is running, let's navigate to the MACHINE_IP in firefox to look a
 
 There's a few things worth checking here:
  
-*the social media links in the footer... but none of them actually go anywhere.
-*login page by blogengine.net
-*/post/welcome-to-hack-park which has a comment section (Possible XSS)
-*/contact page (Possible XSS)
+* the social media links in the footer... but none of them actually go anywhere.
+* login page by blogengine.net
+* /post/welcome-to-hack-park which has a comment section (Possible XSS)
+* /contact page (Possible XSS)
 
 Let's start by navigating to the Forgot your password? section of the login form.
 
@@ -39,15 +39,15 @@ Let's try a hello alert to see if XSS is working for the comment section on the 
 <script>alert(‘XSS’)</script>
 ```
 
-Unfortunately it seems to get stuck saving the comment and no alert appears. Let's try on the contact page then move on from this method.
+Unfortunately, it seems to get stuck saving the comment and no alert appears. Let's try on the contact page then move on from this method.
 
 No luck, let's go back and check the nmap scan that should be done now.
 
 We can gather a few things from the nmap:
 
-*OS - Microsoft Windows Server 2012 R2
-*3389 for RDP is open
-*Port 80 (The site)
+* OS - Microsoft Windows Server 2012 R2
+* 3389 for RDP is open
+* Port 80 (The site)
 
 We did get some interesting information about the methods on the site though.
 
@@ -62,7 +62,7 @@ We did get some interesting information about the methods on the site though.
 
 Let's go check the /robots.txt to confirm this info. Looks correct. 
 
-I'm going to run a gobusterbuster on the site to see if there is any pages that they may have forgotten to disallow.
+I'm going to run a gobusterbuster on the site to see if there are any hidden pages that they may have forgotten to disallow.
 
 ```
 gobuster dir -u http://10.10.220.231 -w /usr/share/wordlists/dirbuster/directory-list-2.3-small.txt
@@ -72,24 +72,26 @@ Important to note when using dirbuster is the different [status codes](https://d
 
 After launching dirbuster, I'm seeing hundreds of available directories (200) but only a few interesting ones.
 
-*/scripts (301) - Not allowed
-*/search (200) - Allowed, trying XSS on this - no luck.
-*/custom (301) - Not allowed
-*/searchhistory (200) - Just takes you to the search page
+* /scripts (301) - Not allowed
+* /search (200) - Allowed, trying XSS on this - no luck.
+* /custom (301) - Not allowed
+* /searchhistory (200) - Just takes you to the search page
 
-I'm not finding anything on the page for the clowns name. The social media links didn't go anywhere so lets try a [reverse image search](https://imgops.com/upload) on the clown's photo.
+I'm not finding anything on the page for the clowns name. 
 
-Try some of the different sites for the photo with imgops. 
+The social media links didn't go anywhere so lets try a [reverse image search](https://imgops.com/upload) on the clown's photo.
 
-You will find the clown's name (if you didn't already know it).
+* Try some of the different sites for the photo with imgops. 
 
-You could do some EXIF, but I don't want to know where that scary clown is... so I'm going to skip it unless I need it later.
+* You will find the clown's name (if you didn't already know **IT**).
 
-Task 2:  Using Hydra to brute-force a login
+* Finally, you could do some EXIF. However, I don't want to know where that scary clown is... so I'm going to skip it unless I need it later.
+
+## Task 2:  Using Hydra to brute-force a login
 
 This task name is kind of a give away, but testing the login form earlier I was going to be trying this anyway since there was no lockout for invalid attempts.
 
-**1) What request type is the Windows website login form using?
+**1) What request type is the Windows website login form using?**
 
 Navigate to the login form and inspect the html to find the method, from what I've seen this is usually POST.
 
@@ -99,19 +101,19 @@ Navigate to the login form and inspect the html to find the method, from what I'
 
 We also get the action from this which will be needed to bruteforce the form.
 
-**2) Guess a username, choose a password wordlist and gain credentials to a user account!
+**2) Guess a username, choose a password wordlist and gain credentials to a user account!**
 
 We will also need the following to brute force with hydra:
 
-*Error message for invalid login: Login failed
-*id for the username and password fields
+* Error message for invalid login: Login failed
+* id for the username and password fields
 
 ```html
 <input name="ctl00$MainContent$LoginUser$UserName" type="text" value="no" id="UserName" class="textEntry ltr-dir" />
 <input name="ctl00$MainContent$LoginUser$Password" type="password" id="Password" class="passwordEntry ltr-dir" />
 ```
 
-*VIEWSTATE & EVENTVALIDATION from source
+* VIEWSTATE & EVENTVALIDATION from source
 
 ```
 <input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="0gSvbjURsSQNHy6akuYRcAxJovcdMHNTPJVS328KJi6nW/f/UvMSr5I6EqpPpEz3TcCjs4/pv8DtMx1qOyYJuDb44ad0TOYIlHPNKpeQzTBaN2bKVi8vIAohVLP2zEE1JuQOj+Pp8G8wDoPQHlQRAHX5DH5aKMaDbVJAhOJrRkyXGjwYTib86N1+2+muiEXlmT47Xjj5IfIkUmUfVnv1A/00LXIWsYjDDe3zD3rL8acGgIPLYXpdWs/PNmFV44t5uJVrUksqQGp+ZiHwc2HL4LSZM6w/Blt+q+tXT9FnEwD1gWQvXTxOXtEu9Oge5XkrdzLHXeGgzPRXpiWe806+kxmysmkjrgQWlRb0qRVxtUK+Azx6" />
@@ -120,11 +122,11 @@ We will also need the following to brute force with hydra:
 
 I'm going to be using [Burp Suite](https://portswigger.net/burp) to intercept a login request to get the payload (all this info together).
 
-*Start burp.
-*Go to proxy tab and turn intercept off.
-*Open firefox and navigate to the login page.
-*Turn on [FoxyProxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/) for Burp.
-*Turn intercept on and submit a incorrect login using ^USER^ and ^PASS^ so you don't have to go in and modify the payload.
+* Start burp.
+* Go to proxy tab and turn intercept off.
+* Open firefox and navigate to the login page.
+* Turn on [FoxyProxy](https://addons.mozilla.org/en-US/firefox/addon/foxyproxy-standard/) for Burp.
+* Turn intercept on and submit a incorrect login using ^USER^ and ^PASS^ so you don't have to go in and modify the payload.
 
 ```
 __VIEWSTATE=bn2IF%2FMii4B%2Feif7lhMIfZLZT6E78sPArHOratYwn2FcneCJuHeWJLbw5yTNnI%2Fpv%2BBz9VcFmBshvmIb9yDahSZoNy6%2BHiihSkSrUIAxCL2kis%2FdD0spca1ml3kR9N9DkSBXn%2FK6fk0G6Rk6%2B2jsgRVly9LJbZhE%2BgBOY2m6H0yiAmurav4mSSvcugDw9qaE0Sc%2F6BZE9NFz0RoWjxjq2%2BhhygGG0kYjJOKuyXBIcf6BSj0aLxVW8RALhOtO%2FPLRa8neezjMbCqQSAQyHZuWwJHnQz%2BWC9eK82gjUEu9Jsez%2FePIz8W3NA%2FEwnyhmrLeVbezqo0fvZWahl7sdgks41fVz2RL7YiLkY8z5qtCaNvDZmyL&__EVENTVALIDATION=eBlJe%2Fme8dU7GyaraKmAlVquPs%2F4rKPfnKmHIIcmrd46xPXi2dfMJifYamCroribdwV8wQuqQC%2FJ8VzVbZs8srZitTYWwPecoeZ6tHsbBDbuuyOMu7wEyaWVocZdL%2FdTdBjX8thBwFCCXdD34zMNEtPn9JKBxxJtcPYyxAcwxscD%2BVqO&ctl00%24MainContent%24LoginUser%24UserName=^USER^&ctl00%24MainContent%24LoginUser%24Password=^PASS^&ctl00%24MainContent%24LoginUser%24LoginButton=Log+in
@@ -164,17 +166,17 @@ ENTER
 
 ## Task 3:  Compromise the machine
 
-**1) Now you have logged into the website, are you able to identify the version of the BlogEngine?
+**1) Now you have logged into the website, are you able to identify the version of the BlogEngine?**
 
 Let's go ahead and log in to our admin account we compromised on the site and try to find the version of BlogEngine being used.
 
-Immediately we see that we set off some red flags with our attempted XSS comments in the "LATEST COMMENTS" section.
+* Immediately we see that we set off some red flags with our attempted XSS comments in the "LATEST COMMENTS" section.
 
-Let's go ahead and click to delete them all. We see this didn't work because comments have to be approved by an admin.
+* Let's go ahead and click to delete them all. We see this didn't work because comments have to be approved by an admin.
 
-Now let's go ahead and look at the plugins. Create a txt file and list them all along with their version incase we get locked out.
+* Now, let's look at the plugins. Create a txt file and list them all along with their version incase we get locked out.
 
-Finally, we can navigate to the **About section and find the Version along with some other information.
+* Finally, we can navigate to the **About section and find the Version along with some other information.**
 
 ```
 Your BlogEngine.NET Specification
@@ -188,7 +190,7 @@ Your BlogEngine.NET Specification
     Role provider: XmlRoleProvider
 ```
 
-**2) What is the CVE?
+**2) What is the CVE?**
 
 Now, it's time to look for an exploit. You can use [Exploit-DB](http://www.exploit-db.com/) or searchsploit.
 
@@ -212,7 +214,7 @@ Shellcodes: No Results
 
 You can check any of these exploit files to see the CVE commented, or look at them in exploit-db.
 
-**3) Who is the webserver running as?
+**3) Who is the webserver running as?**
 
 We got the identity earlier in the About section.
 
@@ -296,7 +298,7 @@ Now jump over to your netcat session and run the binary (smsss.exe).
 
 Awesome, we got a meterpreter shell!
 
-**1) What is the OS version of this windows machine?
+**1) What is the OS version of this windows machine?**
 
 ```
 sysinfo
@@ -304,11 +306,11 @@ sysinfo
 
 Do the same process you did to get your msfvenom shell onto the device, to get x86 [winPEAS.exe](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS/winPEASexe/binaries/x86/Release).
 
-**2) What is the name of the abnormal service running?
+**2) What is the name of the abnormal service running?**
 
 This is the scheduling service, let's look for a binary used by it that we can exploit.
 
-**3) What is the name of the binary you're supposed to exploit? 
+**3) What is the name of the binary you're supposed to exploit?**
 
 Using enumeration with winPEAS, we will find a few things.
 
@@ -329,11 +331,11 @@ Go ahead and exit the current meterpreter session, and run the shell again on th
 ### WIN! We got system!
 
 
-**4) What is the user flag (on Jeffs Desktop)?
+**4) What is the user flag (on Jeffs Desktop)?**
 
 Navigate to Jeff's desktop and open the flag with type.
 
-**5) What is the root flag?
+**5) What is the root flag?**
 
 We're going to pretend we didn't see it on the desktop when we RDPd.
 
