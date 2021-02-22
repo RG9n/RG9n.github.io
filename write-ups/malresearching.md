@@ -135,4 +135,6 @@ Go to community to see what they have to say about the file.
 
 [So you want to analyze malware?](https://blog.cmnatic.co.uk/posts/so-you-want-to-analyse-malware/)
 
+### Congratulations! You’re done with the room!
+
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
