@@ -77,9 +77,9 @@ After launching dirbuster, I'm seeing hundreds of available directories (200) bu
 * /custom (301) - Not allowed
 * /searchhistory (200) - Just takes you to the search page
 
-I'm not finding anything on the page for the clowns name. 
+I'm not finding anything on the site for the clowns name. 
 
-The social media links didn't go anywhere so lets try a [reverse image search](https://imgops.com/upload) on the clown's photo.
+The social media links didn't go anywhere, so lets try a [reverse image search](https://imgops.com/upload) on the clown's photo.
 
 * Try some of the different sites for the photo with imgops. 
 * You will find the clown's name (if you didn't already know **IT**).
@@ -213,17 +213,17 @@ You can check any of these exploit files to see the CVE commented, or look at th
 
 We got the identity earlier in the About section.
 
-Before we move on to Task 4 on privilege escalation, we must pick an exploit to launch a shell for initial access.
+Before we move on to Task 4 (Privilege Escalation), we must pick an exploit to launch a shell for initial access.
 
 I will be using BlogEngine.NET 3.3.6 - Directory Traversal / Remote Code Execution.
 
-1. Download the [exploit](https://www.exploit-db.com/exploits/46353) into your HackPark dir.
-1. Modify the TcpClient to your "Tun0 IP", 7777 (or whatever port you want to use).
-1. Rename the script to PostView.ascx as instructed by the exploit.
-1. Go to http://MACHINE_IP/admin/#/content/posts to edit the post.
-1. Open the File Manager (icon on the far right).
-1. Upload the PostView.ascx script (you should see it appear next to the image).
-1. Save and open a rlwrap netcat listener (rlwrap allows use of arrow keys in the terminal).
+* Download the [exploit](https://www.exploit-db.com/exploits/46353) into your HackPark dir.
+* Modify the TcpClient to your "Tun0 IP", 7777 (or whatever port you want to use).
+* Rename the script to PostView.ascx as instructed by the exploit.
+* Go to http://MACHINE_IP/admin/#/content/posts to edit the post.
+* Open the File Manager (icon on the far right).
+* Upload the PostView.ascx script (you should see it appear next to the image).
+* Save and open a rlwrap netcat listener (rlwrap allows use of arrow keys in the terminal).
 
 ```
 rlwrap nc -nlvp 7777
@@ -281,12 +281,12 @@ We should see this pop up in our http server terminal to confirm the transfer (o
 10.10.220.231 - - [21/Feb/2021 23:48:56] "GET /smsss.exe HTTP/1.1" 200
 ```
 
-Alright, now let's open msfconsole in a different terminal window.
+Alright, now let's open msfconsole in a new terminal window.
 
 We are going to use the multi/handler.
-*set the LHOST to your Tun0-IP.
-*set the LPORT to the port you picked (7778).
-*exploit!
+* set the LHOST to your Tun0-IP.
+* set the LPORT to the port you picked (7778).
+* exploit!
 
 Now jump over to your netcat session and run the binary (smsss.exe).
 
@@ -308,7 +308,7 @@ This is the scheduling service, let's look for a binary used by it that we can e
 
 Using enumeration with winPEAS, we will find a few things.
 
-**It also lets us know of some AutoLogon credentials for administrator;4q6XvFES7Fdxs. Let's try that with rdp... Looks like we found another path in!
+**It also lets us know of some AutoLogon credentials for administrator;4q6XvFES7Fdxs. Let's try that with rdp... Looks like we found another path in!**
 
 However, this wasn't the intended path... so let's continue on.  TryHackMe directs towards a binary and Message.exe stands out.
 
@@ -316,11 +316,11 @@ This is useful because WindowsScheduler runs it as system and it will also be pe
 
 Now we must move our smsss.exe to the directory Message.exe is located in (c:\Program Files (x86)\SystemScheduler\).
 
-This is what creates alerts on the device. So if you were to do echo "Hi!" it would pop up on the device.
+Message.exe creates alerts on the device. So if you were to do echo "Hi!" once you swapped the binaries and had a elevated reverse shell, it would pop up on the device.
 
-Now rename Message.exe to something else and change your shell to Message.exe, swapping the actual binary name with your reverse shell.
+Now rename Message.exe to something else (Message.old) and change your shell to Message.exe, swapping the actual binary name with your reverse shell.
 
-Go ahead and exit the current meterpreter session, and run the shell again on the device as Message.exe.
+Go ahead and exit the current meterpreter session, and run the shell again on the device as Message.exe!
 
 ### WIN! We got system!
 
@@ -342,5 +342,7 @@ We will actually see that it is still in recents and there is a link file to it 
 ## Mitigations
 
 ### Initial Access
+
+### Privilege Escalation
 
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
