@@ -43,7 +43,7 @@ You are then given an any.run [report](https://any.run/report/c378387344e0a552dc
 
 **1) Name the key term for the type of malware that Emotet is classified as**
 
-Threats part of General Info.
+Answer found in Threats part of General Info.
 
 **2) Research time! What type of emails does Emotet use as its payload?**
 
@@ -97,7 +97,7 @@ SHA256          6F870C80361062E8631282D31A16872835F7962222457730BC55676A61AD1EE0
 
 **3) What would be the syntax to retrieve the SHA256 checksum of "TryHackMe.exe" using CertUtil in Powershell?**
 
-Now we're going to use certutil (for if we do not have FileHash installed)
+Now we're going to use an alternative, CertUtil.
 
 ```ps
 CertUtil -hashfile TryHackMe.exe SHA256
