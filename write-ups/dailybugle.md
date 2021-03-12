@@ -87,11 +87,11 @@ I am going to be using one that comes with sqlmap, **/usr/share/sqlmap/data/txt/
 
 However, I'm unsure what kind of hash this is so let's do some research by looking into the start of the hash, **$2y$**.
 
-We can find that this hash is [bcrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/).
+We can find that this hash is most likely [bcrypt](https://auth0.com/blog/hashing-in-action-understanding-bcrypt/).
 
 Worth noting that [hashid](https://github.com/psypanda/hashID) can be used to help identify the hash but does not pinpoint it exactly.
 
-There are multiple hash crackers we could use here but I will be using [John the Ripper](https://github.com/openwall/john).
+There are multiple hash crackers we could use here, but I will be using [John the Ripper](https://github.com/openwall/john).
 
 ```
 john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=bcrypt
@@ -101,16 +101,16 @@ Awesome, the rockyou.txt and john were able to easily crack the super secure **s
 
 **3) What is the user flag?**
 
-Let's take a shot in the dark real quick and see if root has the same password as the Joomla user (Jonah) we found.
+Let's take a shot in the dark real quick and see if root has the same password as the Joomla user (Jonah) we found in ssh.
 
 No luck, so we'll be moving on. Since we have a super user, let's navigate to the administrator directory that joomscan found earlier (http://10.10.234.214/administrator/) and see what privileges we have.
 
-It looks like we can do Extensions> Templates > Templates and edit the Protostar Details and Files > index.php.
+It looks like we can do Extensions> Templates> Templates and edit the Protostar Details and Files.
 
 * Create a new php file, name it something like errorEN.php to hide it.
 * Put in the php reverse shell code and save.
 * Setup reverse shell with correct port and openVPN tun0-IP.
-* Make a netcat listener on port 6666 and execute a url-encoded reverse shell.
+* Make a netcat listener on port 6666 and execute a url-encoded reverse shell. (I use rlwrap to use arrowkeys in terminal)
 
 ```
 rlwrap nc -lvnp 6666
@@ -212,11 +212,11 @@ If it does, we can use the root account to get both the user and root flags.
 
 We can attempt to get a more stable **secure shell (SSH)**.
 
-Unfortunately it looks like the password does not work for root.
-
 ```
 ssh root@10.10.234.214
 ```
+
+Unfortunately it looks like the password does not work for root.
 
 So let's try it on the user we found, jjameson, to see if the password works.
 
@@ -224,7 +224,7 @@ So let's try it on the user we found, jjameson, to see if the password works.
 
 Let's go through and try to escalate privileges with yum from our user account.
 
-Run sudo -l to see if jjameson can run yum on dailybugle.
+Run sudo -l to list permissions and see if jjameson can run yum on dailybugle.
 
 ```
 [jjameson@dailybugle ~]$ sudo -l
@@ -307,7 +307,7 @@ Session completed
 
 ### Congratulations! You're done with the room!
 
-## Mitigations
+## Mitigations (coming soon)
 
 ### Initial Access
 
