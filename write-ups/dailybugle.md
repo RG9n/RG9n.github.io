@@ -27,7 +27,9 @@ Looking at the blogging site and its source, we see a post about Spider-Man robb
 
 ## Task 2: Obtain user and root
 
-We see that we can get the information for a brute-force if needed, but let's look into [Joomla](https://www.joomla.org/) first.
+We see that we can get the information for a brute-force if needed, but we know we're going to be using SQLi and that there is a MySQL server, so let's try a quick [injection](https://www.netsparker.com/blog/web-security/sql-injection-cheat-sheet/#MySQLIf). I wasn't able to get in, and am pretty sure this is the wrong path... so I'm going to be moving on.
+
+Now let's look into [Joomla](https://www.joomla.org/).
 
 **1) What is the Joomla version?**
 
