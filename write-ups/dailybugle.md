@@ -103,7 +103,7 @@ Awesome, the rockyou.txt and john were able to easily crack the super secure **s
 
 Let's take a shot in the dark real quick and see if root has the same password as the Joomla user (Jonah) we found.
 
-No luck, so we'll be moving on. Since we have a super user, let's navigate to the administrator directory that joomscan found earlier (http://10.10.x.x/administrator/) and see what privileges we have.
+No luck, so we'll be moving on. Since we have a super user, let's navigate to the administrator directory that joomscan found earlier (http://10.10.234.214/administrator/) and see what privileges we have.
 
 It looks like we can do Extensions> Templates > Templates and edit the Protostar Details and Files > index.php.
 
