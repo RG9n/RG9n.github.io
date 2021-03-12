@@ -9,17 +9,17 @@ Let's start by deploying the machine and running an nmap. Since we're not really
 ```
 nmap 10.10.x.x -vv -A -T4 -p- -Pn
 ```
-* -vv Very verbose information
-* -A Enable OS detection, version detection, script scanning, and traceroute
+* -vv Very verbose information.
+* -A Enable OS detection, version detection, script scanning, and traceroute.
 * -T4 Speed 1-5 selectable. I prefer 4 because 5 seems to occassionally have issues.
-* -p- Run on all ports
-* -Pn ignores ping discovery
+* -p- Run on all ports.
+* -Pn ignores ping discovery.
 
 From this scan, we can see 3 interesting ports open.
 
-* Port 22: SSH - possible RCE if able to gain credentials
+* Port 22: SSH - possible RCE if able to gain credentials.
 * Port 80: Website - navigating here it appears to be a blogging site, nmap pointed it out to be Joomla.
-* Port 3306: MySQL server
+* Port 3306: MySQL server.
 
 **1) Access the web server, who robbed the bank?**
 
@@ -45,7 +45,7 @@ joomscan -u http://10.10.234.214
 [++] Admin page : http://10.10.234.214/administrator/  
 ```
 
-Cool, we can see now that it is Joomla (3.7.0)
+Cool, we can see now that it is Joomla (3.7.0).
 
 Toss the version into searchsploit or check [Exploit-DB](https://www.exploit-db.com/) and cross your fingers!
 
@@ -55,7 +55,7 @@ We're in luck, there appears to be several SQL injection exploits for 3.7.0 with
 
 **2) What is Jonah's cracked password?**
 
-TryHackMe says to attempt this without SQLMap, so I will be using [Joomblah.py](https://raw.githubusercontent.com/stefanlucas/Exploit-Joomla/master/joomblah.py)
+TryHackMe says to attempt this without SQLMap, so I will be using [Joomblah.py](https://raw.githubusercontent.com/stefanlucas/Exploit-Joomla/master/joomblah.py).
 
 ```
 python joomblah.py http://10.10.234.214
