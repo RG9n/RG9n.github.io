@@ -541,6 +541,8 @@ Next, we've got to take out the way that they got in. You can actually see a not
 
 ### Privilege Escalation
 
+James should only have have access to run the commands needed, not all commands.
+
 Clean the bash in /home/james directory. It has .suid_bash along with .overpass, which were both used for escalation. It also contains the ssh-backdoor.
 
 ```
