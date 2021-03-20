@@ -29,7 +29,7 @@ The scan looks like it will take awhile, so let's brainstorm some of these ports
 * 3389 (RDP)
 * 135 (msrpc)
 * 445 (SMB)
-* 49663
+* 49663 (http)
 
 After visiting the site and finding nothing, we will move on to what appeared to be a smb server.
 
