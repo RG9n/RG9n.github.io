@@ -457,7 +457,7 @@ Checking Bob's desktop we see the (user.txt). Let's try to read it.
 type user.txt
 ```
 
-Awesome, we have access to the user flag without any escalation.
+Great, we have access to the user flag without any escalation.
 
 Let's check our privileges.
 
@@ -512,9 +512,9 @@ Awesome, we can see we have access to 3 privileges.
 
 After some [research](https://itm4n.github.io/printspoofer-abusing-impersonate-privileges/), I will be exploiting the vulnerability in SeImpersonatePrivilege which is possible because service accounts are required to run with elevated privileges using this.
 
-We can use [Printspoofer](https://github.com/itm4n/PrintSpoofer) to exploit for escalation. Note, this will get flagged as a virus or malware.
+We can use [Printspoofer](https://github.com/itm4n/PrintSpoofer) to exploit for escalation to system. Note, this binary will get flagged as a virus or malware.
 
-Rename it to avoid detection to svcchost.exe
+Rename it to avoid detection to svcchost.exe.
 
 Use put to get the exploit onto the server, navigate to the directory it was put in (C:\inetpub\wwwroot\nt4wrksv), and then execute it to spawn a SYSTEM cmd with the shell that we have.
 
@@ -535,7 +535,7 @@ nt authority\system
 
 ```
 more C:\users\administrator\desktop\root.txt
-``
+```
 
 Found it on the Administrator desktop.
 
