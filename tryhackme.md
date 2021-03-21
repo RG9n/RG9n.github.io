@@ -17,4 +17,4 @@ You have came to the right place to learn about CTFs/Challenges! I am going thro
 * [HackPark](./write-ups/hackpark.md)
 * [Daily Bugle](./write-ups/dailybugle.md)
 * [Overpass 2 - Hacked](./write-ups/overpass2hacked.md)
-* Relevant
+* [Relevant](./write-ups/relevant.md)
