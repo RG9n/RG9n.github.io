@@ -321,7 +321,7 @@ Nmap done: 1 IP address (1 host up) scanned in 2704.03 seconds
            Raw packets sent: 133005 (5.856MB) | Rcvd: 2325 (168.249KB)
 ```
 
-From the nmap, we can see that it is most-likely a Microsoft Windows 2012|2016
+From the nmap, we can see that it is most likely a Microsoft Windows 2012|2016
 
 Let's try to RDP in with these credentials since we saw port 3389 open.
 
