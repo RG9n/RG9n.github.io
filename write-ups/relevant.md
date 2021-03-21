@@ -541,7 +541,7 @@ Found it on the Administrator desktop.
 
 ### Congratulations! You're done with the room!
 
-## Mitigations (coming soon)
+## Mitigations
 
 ### Initial Access
 
