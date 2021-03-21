@@ -364,7 +364,7 @@ Microsoft Windows - SMB Remote Code Execution Scanner (MS17-010) (Metasploit)
 
 We will not consider the last option, because it is for a Denial of Service which we do not want.
 
-We're could use [Microsoft Windows - 'EternalRomance'/'EternalSynergy'/'EternalChampion' SMB Remote Code Execution (Metasploit) (MS17-010)](https://www.exploit-db.com/exploits/43970).
+We could use [Microsoft Windows - 'EternalRomance'/'EternalSynergy'/'EternalChampion' SMB Remote Code Execution (Metasploit) (MS17-010)](https://www.exploit-db.com/exploits/43970).
 
 However, the room recommends manual exploitation so we're going to log back into the smb share and see if we can upload files using put.
 
@@ -420,7 +420,7 @@ smb: \> ls
                 7735807 blocks of size 4096. 4947171 blocks available
 ```
 
-* Finally, we can curl the shell in the browser to execute.
+* Finally, we can curl the shell to execute.
 
 ```
 curl http://10.10.17.123:49663/nt4wrksv/dis0ver.aspx
