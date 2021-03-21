@@ -216,7 +216,7 @@ We can attempt to get a more stable **secure shell (SSH)**.
 ssh root@10.10.234.214
 ```
 
-Unfortunately it looks like the password does not work for root.
+Unfortunately, it looks like the password does not work for root.
 
 So let's try it on the user we found, jjameson, to see if the password works.
 
@@ -307,10 +307,16 @@ Session completed
 
 ### Congratulations! You're done with the room!
 
-## Mitigations (coming soon)
+## Mitigations
 
 ### Initial Access
 
+* Update Joomla to 3.9.0
+* More secure password usage so the hash is more difficult to crack.
+
 ### Privilege Escalation
+
+* Do not keep user credentials in configuration.php if possible
+* Find alternative to the yum plugin or only allow access to it from privileged users.
 
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
