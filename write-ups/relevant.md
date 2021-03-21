@@ -545,6 +545,11 @@ Found it on the Administrator desktop.
 
 ### Initial Access
 
+* Disallow anonymous SMB login.
+* Patch SMB vulnerability (CVE-2017-0143)
+
 ### Privilege Escalation
+
+* Fix service account (iis apppool\defaultapppool) privileges (SeImpersonatePrivilege).
 
 Feel free to reach out to me on [Twitter](https://twitter.com/R_G_9_n) if you have any questions.
