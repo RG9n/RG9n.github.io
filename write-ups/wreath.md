@@ -339,7 +339,7 @@ This is noted in the tryhackme reading.
 
 **3) How could you see which IP addresses are active and allow ICMP echo requests on the 172.16.0.x/24 network using Bash?**
 
-```
+```bash
 for i in {1..255}; do (ping -c 1 172.168.0.${i} | grep "bytes from" &); done
 ```
 
