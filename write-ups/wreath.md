@@ -1851,7 +1851,7 @@ Read through the **index.php** file.
 
 **1) What does Thomas have to phone Mrs Walker about?**
 
-```http
+```
 <!DOCTYPE html>
 <html lang=en>
         <!-- ToDo:
