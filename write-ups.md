@@ -1,6 +1,6 @@
 ## Write-Ups
 [TryHackMe](./tryhackme.md)
 
-HackTheBox
+[HackTheBox](./hackthebox.md)
 
 Tools
