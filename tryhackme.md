@@ -23,5 +23,5 @@ You have come to the right place to learn about CTFs/Challenges! I finished the 
 
 ### Networks
 
-* Wreath
+* [Wreath](./write-ups/wreath.md)
 * Throwback
