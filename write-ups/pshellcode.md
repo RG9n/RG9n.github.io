@@ -178,6 +178,10 @@ SSSSVh-                              SSSWSVh
                                      172.26.201.217
 ```
 
-From our investigation, we can conclude that this is a windows/meterpreter/reverse_https x86 shellcode payload because the only difference in the hex strings was the user agent included in the msfvenom one we created.
+From our investigation, we can conclude that this is a [windows/meterpreter/reverse_https](https://github.com/rapid7/metasploit-framework/blob/master/documentation/modules/payload/windows/meterpreter/reverse_https.md#:~:text=windows%2Fmeterpreter%2Freverse_https%20is%20a,it%20talks%20to%20the%20attacker.) x86 shellcode payload because the only difference in the hex strings was the user agent included in the msfvenom one we created. Since they are using a meterpreter shell, we know they will be using Metasploit as their C2 to listen for the connection.
 
 This is likely due to a different payload creation with "HttpUserAgent=", as I used the default.
+
+**Why https and not tcp?**
+1. Evasion - Firewalls usually allow http/https traffic and would be more likely to block tcp. Along with this, the wininet API that we see that it used can allow an adversary to use proxy/auth settings set up for Internet access.
+2. Persistence - If the target loses internet, it will attempt to reconnect with the attack source.
