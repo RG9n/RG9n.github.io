@@ -3,4 +3,6 @@
 
 [HackTheBox](./hackthebox.md)
 
+[Individual Projects](./individualprojects.md)
+
 Tools
