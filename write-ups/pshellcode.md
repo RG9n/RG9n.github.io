@@ -182,6 +182,16 @@ From our investigation, we can conclude that this is a [windows/meterpreter/reve
 
 This is likely due to a different payload creation with "HttpUserAgent=", as I used the default.
 
+## windows/meterpreter/reverse_https
+
 **Why https and not tcp?**
 1. Evasion - Firewalls usually allow http/https traffic and would be more likely to block tcp. Along with this, the wininet API that we see that it used can allow an adversary to use proxy/auth settings set up for Internet access.
-2. Persistence - If the target loses internet, it will attempt to reconnect with the attack source.
+2. Persistence - If the target loses internet/connectivity, it will attempt to reconnect with the attack source.
+
+## Recommendations
+
+1. Remove 172.26.201.217 from the network.
+2. Review other devices for connection with this IoC IP.
+3. Block 172.26.201.217 in the firewall.
+4. Locate the source of the powershell and clean the device (maldoc, etc).
+
