@@ -195,7 +195,7 @@ This is likely due to a different payload creation with "HttpUserAgent=", as I u
 3. Block 172.26.201.217 in the firewall.
 4. Locate the source of the powershell and clean the device (maldoc, etc).
 
-Raw dump and windows/meterpreter/reverse_http [block api](https://github.com/rapid7/metasploit-framework/blob/master/external/source/shellcode/windows/x86/src/block/block_reverse_http.asm):
+Raw dump for deeper look at the shellcode from the powershell and windows/meterpreter/reverse_http [block api](https://github.com/rapid7/metasploit-framework/blob/master/external/source/shellcode/windows/x86/src/block/block_reverse_http.asm):
 
 ```
 0:  fc                      cld
