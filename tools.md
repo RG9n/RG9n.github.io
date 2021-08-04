@@ -4,10 +4,10 @@ Useful tools and my thoughts on them can be found here.
 
 ## Penetration Testing
 
-[Recon Commands](/resources/recommands.html)
+[Recon Commands](/resources/recommands.md)
 
 ## Reverse Engineering
 
-[Office Documents](/resources/officerev.html)
+[Office Documents](/resources/officerev.md)
 
 ## OSINT
