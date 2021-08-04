@@ -1,2 +1,2 @@
 # RG9n.github.io
-Small project for my own learning/education to take notes on CTFs I do.
+Small web project for my own learning/education to take notes and document Cyber Security relevant experience from CTFs, projects, tools, and anything else I dive into.
