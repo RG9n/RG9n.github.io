@@ -12,4 +12,4 @@ This will give the version and office application for the file.
 olevba OfficeFileName.xtension --deobf/decode/reveal
 ```
 
-[Olevba](https://github.com/decalage2/oletools/wiki/olevba) examines macros and more present without opening or executing the file.
+[Olevba](https://github.com/decalage2/oletools/wiki/olevba) examines macros and other present scripts without opening or executing the file.
