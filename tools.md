@@ -6,6 +6,6 @@ Common tools and my thoughts on them can be found here.
 
 [Recon Commands](/resources/recommands.md)
 
-## Forensics
-
 ## Reverse Engineering
+
+[Office Documents](/resources/officerev.md)
