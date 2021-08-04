@@ -9,3 +9,15 @@ N/A
 ## VBS
 
 N/A
+
+## Golang
+
+N/A
+
+## C#
+
+N/A
+
+## .NET
+
+N/A
