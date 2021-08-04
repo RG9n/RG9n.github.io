@@ -10,10 +10,6 @@ Peak Ranking: #653
 
 N/A
 
-## Tracks
-
-N/A
-
 ## Challenges
 
 N/A
