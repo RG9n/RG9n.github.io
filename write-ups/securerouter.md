@@ -17,6 +17,8 @@ There are four main entry points:
 
 I recommend taking a look at the IoT resource, it's a really neat OWASP wiki. It is a little dated though.
 
+TLDR for IoT - update your smart devices firmware and potentially put it onto a separate network where it can talk to eachother but not your actual devices.
+
 ## Router Necessities
 
 I'll start by listing everything we'll be covering here in terms of hardening and how it will prevent attacks. Also the risk to convenience involved... because a lot of security can be time consuming and you will have to decide if the trade-off is worth it.
