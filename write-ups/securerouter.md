@@ -283,4 +283,6 @@ Nmap done: 1 IP address (1 host up) scanned in 13263.05 seconds
 
 Once your nmap is done, ensure no ports are open. If they are, go back to review forwarded ports and UPnP 
 
+## Make sure you check your router for updates and reboot it every so often.
+
 # Congrats! Your router entry is more secure now. However, there are several other ways into a network like Phishing, IoT, etc so always be on the lookout for strange activity.
