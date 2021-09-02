@@ -12,7 +12,7 @@ There are four main entry points:
 
 1. Straight from internet to router through public IP holes (covered here)
 1. From physical home connection attempts ([Wardriving](https://www.pandasecurity.com/en/mediacenter/security/wardriving/), etc. covered here)
-1. From internal threat (compromised friends joining network, phishing, etc) - partially covered might go more in-depth on this in a future project
+1. From internal threat (compromised friends joining network, phishing, etc) - partially covered might go more in-depth on this in a future project.
 1. [IoT](https://wiki.owasp.org/index.php/OWASP_Internet_of_Things_Project) (lightbulbs, security cameras, alexa, etc.) - not covered but might be in the future in depth, lots of legacy software and potential exploits.
 
 I recommend taking a look at the IoT resource, it's a really neat OWASP wiki.
@@ -96,7 +96,7 @@ Example:
 Main network name: Alph4Netw0rk! (Name can be used like a second password since they do not have the name)
 Discoverable: No
 
-Guest network name: !asSecurenet (removed "-guest" and disassociated the name) 
+Guest network name: !asSecurenet (removed "-guest" and disassociated the namng convention from the main network) 
 Discoverable: Yes/No
 ```
 
@@ -112,21 +112,19 @@ Remove WAN ICMP and UDP echo/traceroute queries and requests.
 
 This may interfere with any diagnostics tools you try to run from the outside of your network, but also helps to protect from scans by adversaries to see if you exist.
 
-# Test -Pn with this
-
 ### WPA/WPA2/WPA3
 
 ### Disable WPS
 
-Go into the WiFi section and find the WiFi Protected Setup. Disable this option, it is only used to get access to the network physically by clicking a button.
+Go into the WiFi section and find the WiFi Protected Setup. Disable this option, it is only used to get access to the network physically by clicking a button on the router.
 
 ### UPnP
 
-Some routers have UPnP enabled. Disable this in the UPnP settings. If you want to use it, make sure you keep it updated to clean old unused UPnP Services.
+Some routers have UPnP enabled. Disable this in the UPnP settings. If you want to use it, make sure you keep it updated and set it to automatically clean old unused UPnP Services.
 
 ### MAC Authentication
 
-This will allow you in the advanced settings to create a whitelist/blacklist for the Physical Address (see first section of hardening ipconfig /all for how to find MAC).
+This will allow you in the advanced settings to create a whitelist/blacklist for the Physical Address (see first section of hardening ipconfig /all for how to find MAC). This can be bypassed by MAC spoofing (I'll let you research this on your own - as it's out of scope for this write-up), but will still help to harden the network.
 
 ### I would do a quick router reboot and check to make sure the settings don't reset or change after reboot.
 
@@ -138,17 +136,17 @@ Once you've verified the settings are good, let's move on.
 
 Let's start at your den. 
 
-* Go to google and type in what is my IP (make sure you don't have a VPN)
+* Go to google and type in what is my IP? (make sure you don't have a VPN)
 
-* Write it down on a peice of paper
+* Write it down on a peice of paper.
 
-* Walk to a friends/family's den (make sure they know what you're going to be doing)
+* Walk to a friends/family's den. (make sure they know what you're going to be doing)
 
 * Setup your laptop you will be using.
 
 Your laptop will need [nmap](https://nmap.org/) for this activity.
 
-* Let's start by checking if we can communicate with your router.
+Now that we're ready to start, let's start by checking if your router will respond back to ping requests.
 
 ```ps
 PS C:\Users\RG9n> ping YOURDENIPYOUWROTEDOWN
@@ -189,7 +187,7 @@ You might want to grab a beer or something, it will take awhile.
 ```
 PS C:\Users\rg9in> nmap YOURDENIPYOUWROTEDOWN -A -p- -vv -Pn
 Host discovery disabled (-Pn). All addresses will be marked 'up' and scan times will be slower.
-Starting Nmap 7.91 ( https://nmap.org ) at 2021-09-02 09:20 Eastern Daylight Time
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-09-02 09:20 TimeZone
 NSE: Loaded 153 scripts for scanning.
 NSE: Script Pre-scanning.
 NSE: Starting runlevel 1 (of 3) scan.
