@@ -15,7 +15,7 @@ There are four main entry points:
 1. From internal threat (compromised friends joining network, phishing, etc) - partially covered might go more in-depth on this in a future project.
 1. [IoT](https://wiki.owasp.org/index.php/OWASP_Internet_of_Things_Project) (lightbulbs, security cameras, alexa, etc.) - not covered but might be in the future in depth, lots of legacy software and potential exploits.
 
-I recommend taking a look at the IoT resource, it's a really neat OWASP wiki.
+I recommend taking a look at the IoT resource, it's a really neat OWASP wiki. It is a little dated though.
 
 ## Router Necessities
 
