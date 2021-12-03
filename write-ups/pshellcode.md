@@ -22,7 +22,7 @@ Here's a nice [resource](https://unit42.paloaltonetworks.com/unit42-pulling-back
 
 **Decoded from base64**
 
-We can tell this is encoded with base64 due to the padding at the end ==
+We can tell this is encoded with base64 due to the padding at the end == and the -E flag
 
 There are many [resources](base64decode.org) for decoding base64.
 
@@ -59,7 +59,7 @@ $cmd = "-nop -noni -enc ";iex "& $x86 $cmd $gq"}
 else{$cmd = "-nop -noni -enc";iex "& powershell $cmd $gq";}
 ```
 
-Now that we have the powershell used, we can tell that they are attempting to inject their shellcode by calling 3 functions. They use the function VirtualAlloc() to create memory for the shellcode, then using memset() to copy in the shellcode, and finally creating a thread with CreateThread() to execute the shellcode after a 60 second sleep.
+Now that we have the powershell used, we can tell that they are attempting to inject their shellcode by calling 3 functions. They use the function VirtualAlloc() to create memory for the shellcode, then using memset() to copy in the shellcode, and finally creating a thread with CreateThread() to invoke the shellcode after a 60 second sleep.
 
 ## Shellcode
 
@@ -123,7 +123,9 @@ SSSSVh-
 172.26.201.217
 ```
 
-Immediately, we are able to see the private IP that this attempts to establish a reverse connection with for the shell (172.26.201.217).
+Immediately, we are able to see the private IP that this attempts to establish a reverse connection with for the shell (172.26.201.217). 
+
+This is concerning because the private IP indicates they are inside the network and 172.26.201.217 should also be investigated.
 
 Now, we have two options... we can take a look deeper into this shellcode using the open source tool, [radare2](https://github.com/radareorg/radare2) or we can do some OSINT on these strings to see if they used any further encoding or if we can find it due to the payload being common.
 
